@@ -7,20 +7,14 @@
 
 #define BUFFER_SIZE 1024
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: %s <server_port>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
-
-    int server_port = atoi(argv[1]);
+int main() {
     char buffer[BUFFER_SIZE];
     struct sockaddr_in server_addr, client_addr;
 
     // Configuración del servidor
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(server_port);
+    server_addr.sin_port = htons(67);  // Puerto DHCP para el servidor
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     // Crear socket
@@ -30,14 +24,14 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Bind del socket
+    // Bind del socket al puerto 67
     if (bind(udp_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         perror("Could not bind the socket");
         close(udp_socket);
         return EXIT_FAILURE;
     }
 
-    printf("Servidor escuchando en el puerto %d...\n", server_port);
+    printf("Servidor DHCP escuchando en el puerto 67...\n");
 
     // Loop para recibir mensajes de clientes
     while (1) {
@@ -48,7 +42,7 @@ int main(int argc, char *argv[]) {
             printf("Mensaje recibido de %s:%d -- %s\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), buffer);
 
             // Enviar confirmación de vuelta al cliente
-            const char *confirmation_message = "Mensaje recibido correctamente!";
+            const char *confirmation_message = "DHCPACK: Configuración enviada";
             if (sendto(udp_socket, confirmation_message, strlen(confirmation_message) + 1, 0, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0) {
                 perror("No se pudo enviar la confirmación");
             } else {
