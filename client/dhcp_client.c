@@ -9,50 +9,50 @@
 int check(int exp, const char *msg);
 
 int main(int argc, char **argv) {
-    if (argc != 2) {
-        printf("Usage: %s <server_port>\n", argv[0]);
+    if (argc != 3) {
+        printf("Usage: %s <server_ip> <server_port>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
-    int my_port = atoi(argv[1]);
-    int udp_rx_socket;
-    struct sockaddr_in peer_addr;
-    struct sockaddr_in my_addr = {
-        .sin_family = AF_INET,
-        .sin_port = htons(my_port),
-        .sin_addr.s_addr = htonl(INADDR_ANY)
-    };
-
+    const char *server_ip = argv[1];
+    int server_port = atoi(argv[2]);
     char buffer[BUFFER_SIZE];
+    struct sockaddr_in server_addr;
 
+    // Configuración del cliente
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(server_port);
+    inet_pton(AF_INET, server_ip, &server_addr.sin_addr);
 
-    if ((udp_rx_socket = socket(AF_INET, SOCK_DGRAM, 0)) <= 0) {
+    // Crear socket
+    int udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (udp_socket <= 0) {
         perror("Could not create a socket");
         return EXIT_FAILURE;
     }
 
-    // Bind the socket to the address/port
-    int result = bind(udp_rx_socket, (struct sockaddr *)&my_addr, sizeof(my_addr));
+    // Enviar mensaje al servidor
+    const char *message = "Hola, servidor!";
+    if (sendto(udp_socket, message, strlen(message) + 1, 0, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        perror("No se pudo enviar el mensaje");
+        close(udp_socket);
+        return EXIT_FAILURE;
+    }
 
-    check(result, "Could not bind the socket");
+    printf("Mensaje enviado a %s:%d\n", server_ip, server_port);
 
-    socklen_t address_length = sizeof(peer_addr);
-    int bytes_received = recvfrom(udp_rx_socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&peer_addr, &address_length);
+    // Recibir confirmación del servidor
+    socklen_t server_addr_len = sizeof(server_addr);
+    int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&server_addr, &server_addr_len);
 
-    check(bytes_received, "Could not receive message");
+    if (bytes_received > 0) {
+        printf("Confirmación recibida del servidor: %s\n", buffer);
+    } else {
+        perror("No se pudo recibir la confirmación");
+    }
 
-    printf("Received a packet from: %s:%d --Message = %s\n", inet_ntoa(peer_addr.sin_addr), ntohs(peer_addr.sin_port), buffer);
-
-    close(udp_rx_socket);
+    close(udp_socket);
 
     return EXIT_SUCCESS;
-}
-
-#define SOCKET_ERROR (-1)
-int check(int exp, const char *msg) {
-    if (exp == SOCKET_ERROR) {
-        perror(msg);
-        exit(EXIT_FAILURE);
-    }
-    return exp;
 }
