@@ -1,2 +1,7 @@
 .idea/
 .vscode/
+*.o
+server
+client
+*.out
+*.exe
