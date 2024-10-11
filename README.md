@@ -58,9 +58,16 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
     sudo make run-client
     ```
 
-   El cliente se conectará al servidor en `127.0.0.1` (localhost) y solicitará una configuración de red.
+   El cliente se conectará al servidor y solicitará una configuración de red.
 
-5. **Limpiar los archivos generados**:
+5. **Ejecutar el cliente multithread**:
+   Si deseas probar el cliente multithread, puedes usar el siguiente comando. Este cliente envía múltiples solicitudes al servidor en paralelo:
+
+    ```bash
+    sudo make run-client-multithread
+    ```
+
+6. **Limpiar los archivos generados**:
    Si deseas eliminar los archivos binarios generados por la compilación (ejecutables y archivos objeto), puedes usar el siguiente comando:
 
     ```bash
