@@ -1,3 +1,4 @@
+// dhcp_client.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +12,7 @@
 
 // Función para generar una dirección MAC aleatoria (simulando diferentes clientes)
 void generate_random_mac(char* mac) {
-    srand(time(NULL));
+    srand(time(NULL) + getpid());  // Usamos getpid() para mayor aleatoriedad en caso de ejecutar varios clientes
     snprintf(mac, 18, "00:%02x:%02x:%02x:%02x:%02x",
              rand() % 256, rand() % 256, rand() % 256,
              rand() % 256, rand() % 256);
@@ -29,14 +30,14 @@ int main() {
     // Crear socket
     int udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (udp_socket <= 0) {
-        perror("Could not create a socket");
+        perror("No se pudo crear el socket");
         return EXIT_FAILURE;
     }
 
     // Habilitar el modo broadcast en el socket
     int broadcastEnable = 1;
     if (setsockopt(udp_socket, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable)) < 0) {
-        perror("Could not enable broadcast mode");
+        perror("No se pudo habilitar el modo broadcast");
         close(udp_socket);
         return EXIT_FAILURE;
     }
@@ -49,7 +50,7 @@ int main() {
 
     // Bind al puerto 68 (cliente DHCP)
     if (bind(udp_socket, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0) {
-        perror("Could not bind to port 68");
+        perror("No se pudo enlazar al puerto 68");
         close(udp_socket);
         return EXIT_FAILURE;
     }
@@ -77,15 +78,41 @@ int main() {
 
         // Recibir oferta del servidor (DHCPOFFER)
         socklen_t server_addr_len = sizeof(server_addr);
-        int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE, 0,
+        int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
                                       (struct sockaddr *)&server_addr, &server_addr_len);
 
         if (bytes_received > 0 && strstr(buffer, "DHCPOFFER")) {
+            buffer[bytes_received] = '\0'; // Asegurar que el buffer es un string válido
             printf("Oferta recibida del servidor DHCP: %s\n", buffer);
+
+            // Variables para almacenar la información
+            char assigned_ip[16];
+            char subnet_mask[16];
+            char default_gateway[16];
+            char dns_server[16];
+            long lease_time;
+
+            // Parsear el mensaje DHCPOFFER
+            int parsed_fields = sscanf(buffer,
+                "DHCPOFFER: IP=%15[^;]; MASK=%15[^;]; GATEWAY=%15[^;]; DNS=%15[^;]; LEASE=%ld",
+                assigned_ip, subnet_mask, default_gateway, dns_server, &lease_time);
+
+            if (parsed_fields == 5) {
+                printf("Información recibida:\n");
+                printf("IP Asignada: %s\n", assigned_ip);
+                printf("Máscara de Subred: %s\n", subnet_mask);
+                printf("Puerta de Enlace Predeterminada: %s\n", default_gateway);
+                printf("Servidor DNS: %s\n", dns_server);
+                printf("Duración del Lease: %ld segundos\n", lease_time);
+            } else {
+                printf("No se pudo parsear correctamente la oferta del servidor.\n");
+                retries++;
+                continue; // Intentar nuevamente
+            }
 
             // Enviar mensaje DHCPREQUEST al servidor para solicitar la IP ofrecida
             char request_message[BUFFER_SIZE];
-            snprintf(request_message, BUFFER_SIZE, "DHCPREQUEST: MAC %s Solicitud de la IP ofrecida", mac_address);
+            snprintf(request_message, BUFFER_SIZE, "DHCPREQUEST: IP=%s; MAC %s", assigned_ip, mac_address);
             if (sendto(udp_socket, request_message, strlen(request_message) + 1, 0,
                        (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
                 perror("No se pudo enviar el mensaje DHCPREQUEST");
@@ -93,23 +120,33 @@ int main() {
                 return EXIT_FAILURE;
             }
 
-            printf("Mensaje DHCPREQUEST enviado al servidor DHCP\n");
+            printf("Mensaje DHCPREQUEST enviado al servidor DHCP solicitando IP %s\n", assigned_ip);
 
             // Recibir confirmación del servidor (DHCPACK)
-            bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE, 0,
+            bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
                                       (struct sockaddr *)&server_addr, &server_addr_len);
             if (bytes_received > 0 && strstr(buffer, "DHCPACK")) {
-                // Extraer la duración del lease de la respuesta (simulado)
-                char* lease_duration_str = strstr(buffer, "por");
-                if (lease_duration_str != NULL) {
-                    printf("Confirmación recibida del servidor DHCP: %s\n", buffer);
-                    printf("Duración del lease: %s\n", lease_duration_str + 4);
+                buffer[bytes_received] = '\0'; // Asegurar que el buffer es un string válido
+
+                // Parsear el mensaje DHCPACK
+                parsed_fields = sscanf(buffer,
+                    "DHCPACK: IP=%15[^;]; MASK=%15[^;]; GATEWAY=%15[^;]; DNS=%15[^;]; LEASE=%ld",
+                    assigned_ip, subnet_mask, default_gateway, dns_server, &lease_time);
+
+                if (parsed_fields == 5) {
+                    printf("Confirmación recibida del servidor DHCP:\n");
+                    printf("IP Asignada: %s\n", assigned_ip);
+                    printf("Máscara de Subred: %s\n", subnet_mask);
+                    printf("Puerta de Enlace Predeterminada: %s\n", default_gateway);
+                    printf("Servidor DNS: %s\n", dns_server);
+                    printf("Duración del Lease: %ld segundos\n", lease_time);
                 } else {
-                    printf("Confirmación recibida del servidor DHCP, pero no se pudo determinar la duración del lease.\n");
+                    printf("No se pudo parsear correctamente la confirmación del servidor.\n");
                 }
                 break;
             } else {
-                perror("No se pudo recibir la confirmación DHCPACK");
+                printf("No se pudo recibir la confirmación DHCPACK, reintentando... (%d/%d)\n", retries + 1, MAX_RETRIES);
+                retries++;
             }
         } else {
             printf("No se pudo recibir la oferta del servidor, reintentando... (%d/%d)\n", retries + 1, MAX_RETRIES);

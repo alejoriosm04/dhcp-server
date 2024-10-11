@@ -45,3 +45,14 @@
 [2024-10-09 22:38:04] ERROR: Error al renovar lease: la IP MAC no está asignada a la MAC 00:b0:2c:57:56:36
 [2024-10-09 23:48:29] INFO: Lease registrado para la IP 192.168.1.2 con MAC 00:5d:29:44:ab:64 por 3600 segundos
 [2024-10-09 23:48:29] ERROR: Error al renovar lease: la IP MAC no está asignada a la MAC 00:5d:29:44:ab:64
+[2024-10-11 02:33:11] ERROR: No se pudo enlazar el socket al puerto 67.
+[2024-10-11 02:42:50] INFO: Lease registrado para la IP 192.168.1.2 con MAC 00:92:6d:fd:7c:1a por 3600 segundos
+[2024-10-11 02:42:50] ERROR: Error al renovar lease: la IP MAC no está asignada a la MAC 00:92:6d:fd:7c:1a
+[2024-10-11 03:28:39] INFO: Lease registrado para la IP 192.168.1.2 con MAC 00:41:4a:6f:60:d3 por 3600 segundos
+[2024-10-11 03:28:39] ERROR: Error al renovar lease: la IP MAC no está asignada a la MAC 00:41:4a:6f:60:d3
+[2024-10-11 04:10:34] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:19:48:c3:0e:f2 por 3600 segundos
+[2024-10-11 04:10:34] INFO: Lease renovado para la IP 192.168.1.10 con MAC 00:19:48:c3:0e:f2 por 3600 segundos
+[2024-10-11 04:14:20] INFO: Lease registrado para la IP 192.168.1.11 con MAC 00:a9:66:35:5b:15 por 3600 segundos
+[2024-10-11 04:14:20] INFO: Lease renovado para la IP 192.168.1.11 con MAC 00:a9:66:35:5b:15 por 3600 segundos
+[2024-10-11 04:14:37] INFO: Lease registrado para la IP 192.168.1.12 con MAC 00:7d:f9:9c:13:fb por 3600 segundos
+[2024-10-11 04:14:37] INFO: Lease renovado para la IP 192.168.1.12 con MAC 00:7d:f9:9c:13:fb por 3600 segundos

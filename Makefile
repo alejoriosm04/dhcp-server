@@ -43,7 +43,7 @@ clean:
 
 # Ejecutar el servidor (necesita permisos de superusuario para puertos < 1024)
 run-server: $(SERVER_EXEC)
-	sudo ./$(SERVER_EXEC) 192.168.1.2 192.168.1.100
+	sudo ./$(SERVER_EXEC) 192.168.1.10 192.168.1.100 network_config.txt
 
 # Ejecutar el cliente (también necesita permisos de superusuario para el puerto 68)
 run-client: $(CLIENT_EXEC)
