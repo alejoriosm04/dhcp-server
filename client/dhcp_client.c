@@ -5,21 +5,26 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include <pthread.h>  // Añadido para multithreading
 
 #define BUFFER_SIZE 1024
 #define MAX_RETRIES 3
+#define NUM_CLIENTS 5  // Número de clientes a simular
 
 // Función para generar una dirección MAC aleatoria (simulando diferentes clientes)
 void generate_random_mac(char* mac) {
-    srand(time(NULL) + getpid());  // Usamos getpid() para mayor aleatoriedad en caso de ejecutar varios clientes
+    srand(time(NULL) + getpid() + (unsigned long)pthread_self());  // Mayor aleatoriedad
     snprintf(mac, 18, "00:%02x:%02x:%02x:%02x:%02x",
              rand() % 256, rand() % 256, rand() % 256,
              rand() % 256, rand() % 256);
 }
 
-int main() {
+// Función que simula un cliente DHCP
+void* simulate_client(void* arg) {
+    (void)arg;  // Para evitar el warning de parámetro sin usar
+
     char buffer[BUFFER_SIZE];
-    struct sockaddr_in server_addr, client_addr;
+    struct sockaddr_in server_addr;
     char mac_address[18];
 
     // Generar una dirección MAC aleatoria
@@ -30,7 +35,7 @@ int main() {
     int udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (udp_socket <= 0) {
         perror("No se pudo crear el socket");
-        return EXIT_FAILURE;
+        pthread_exit(NULL);
     }
 
     // Habilitar el modo broadcast en el socket
@@ -38,21 +43,22 @@ int main() {
     if (setsockopt(udp_socket, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable)) < 0) {
         perror("No se pudo habilitar el modo broadcast");
         close(udp_socket);
-        return EXIT_FAILURE;
+        pthread_exit(NULL);
     }
 
-    // Configuración del cliente
+    // No es necesario hacer bind explícito al puerto 68
+    /*
     memset(&client_addr, 0, sizeof(client_addr));
     client_addr.sin_family = AF_INET;
     client_addr.sin_port = htons(68);  // Puerto DHCP del cliente
     client_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    // Bind al puerto 68 (cliente DHCP)
     if (bind(udp_socket, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0) {
         perror("No se pudo enlazar al puerto 68");
         close(udp_socket);
-        return EXIT_FAILURE;
+        pthread_exit(NULL);
     }
+    */
 
     // Configuración para el servidor de broadcast
     memset(&server_addr, 0, sizeof(server_addr));
@@ -70,15 +76,16 @@ int main() {
                    (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
             perror("No se pudo enviar el mensaje DHCPDISCOVER");
             close(udp_socket);
-            return EXIT_FAILURE;
+            pthread_exit(NULL);
         }
 
         printf("Mensaje DHCPDISCOVER enviado por broadcast al puerto 67\n");
 
         // Recibir oferta del servidor (DHCPOFFER)
-        socklen_t server_addr_len = sizeof(server_addr);
+        struct sockaddr_in recv_addr;
+        socklen_t recv_addr_len = sizeof(recv_addr);
         int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
-                                      (struct sockaddr *)&server_addr, &server_addr_len);
+                                      (struct sockaddr *)&recv_addr, &recv_addr_len);
 
         if (bytes_received > 0 && strstr(buffer, "DHCPOFFER")) {
             buffer[bytes_received] = '\0'; // Asegurar que el buffer es un string válido
@@ -116,14 +123,14 @@ int main() {
                        (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
                 perror("No se pudo enviar el mensaje DHCPREQUEST");
                 close(udp_socket);
-                return EXIT_FAILURE;
+                pthread_exit(NULL);
             }
 
             printf("Mensaje DHCPREQUEST enviado al servidor DHCP solicitando IP %s\n", assigned_ip);
 
             // Recibir confirmación del servidor (DHCPACK)
             bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
-                                      (struct sockaddr *)&server_addr, &server_addr_len);
+                                      (struct sockaddr *)&recv_addr, &recv_addr_len);
             if (bytes_received > 0 && strstr(buffer, "DHCPACK")) {
                 buffer[bytes_received] = '\0'; // Asegurar que el buffer es un string válido
 
@@ -158,5 +165,23 @@ int main() {
     }
 
     close(udp_socket);
+    pthread_exit(NULL);
+}
+
+int main() {
+    pthread_t clients[NUM_CLIENTS];
+
+    // Crear múltiples hilos para simular varios clientes
+    for (int i = 0; i < NUM_CLIENTS; i++) {
+        if (pthread_create(&clients[i], NULL, simulate_client, NULL) != 0) {
+            perror("No se pudo crear el hilo del cliente");
+        }
+    }
+
+    // Esperar a que todos los hilos terminen
+    for (int i = 0; i < NUM_CLIENTS; i++) {
+        pthread_join(clients[i], NULL);
+    }
+
     return EXIT_SUCCESS;
 }

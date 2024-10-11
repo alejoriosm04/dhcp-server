@@ -47,7 +47,7 @@ run-server: $(SERVER_EXEC)
 
 # Ejecutar el cliente (también necesita permisos de superusuario para el puerto 68)
 run-client: $(CLIENT_EXEC)
-	sudo ./$(CLIENT_EXEC) 127.0.0.1
+	sudo ./$(CLIENT_EXEC)
 
 # Evitar que "make clean" falle si no hay archivos que borrar
 .PHONY: all clean run-server run-client
