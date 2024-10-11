@@ -1,4 +1,3 @@
-// dhcp_server.c
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +7,7 @@
 #include <time.h>
 
 #define BUFFER_SIZE 1024
-#define POOL_SIZE 100  // Ajusta según el tamaño máximo esperado del pool de direcciones
+#define POOL_SIZE 100  
 #define LOG_FILE "dhcp_server.log"
 
 typedef struct {
@@ -205,6 +204,7 @@ lease_record* assign_ip(const char* client_mac, const char* subnet_mask, const c
     }
     return NULL; // No hay direcciones disponibles
 }
+
 
 
 int main(int argc, char *argv[]) {
