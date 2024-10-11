@@ -29,13 +29,21 @@ $(SERVER_EXEC): $(SERVER_OBJ)
 $(CLIENT_EXEC): $(CLIENT_OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
+# Regla para compilar los archivos objeto del servidor
+$(SERVER_OBJ): $(SERVER_SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Regla para compilar los archivos objeto del cliente
+$(CLIENT_OBJ): $(CLIENT_SRC)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 # Limpiar archivos objeto y ejecutables
 clean:
 	rm -f $(SERVER_OBJ) $(CLIENT_OBJ) $(SERVER_EXEC) $(CLIENT_EXEC)
 
 # Ejecutar el servidor (necesita permisos de superusuario para puertos < 1024)
 run-server: $(SERVER_EXEC)
-	sudo ./$(SERVER_EXEC)
+	sudo ./$(SERVER_EXEC) 192.168.1.10 192.168.1.100 network_config.txt
 
 # Ejecutar el cliente (también necesita permisos de superusuario para el puerto 68)
 run-client: $(CLIENT_EXEC)
