@@ -1,7 +1,9 @@
 .idea/
 .vscode/
 *.o
-server
-client
 *.out
 *.exe
+server/dhcp_server.o
+server/server
+client/client
+server/dhcp_server.o
