@@ -6,4 +6,5 @@
 server/dhcp_server.o
 server/server
 client/client
+client/client_multithread
 server/dhcp_server.o
