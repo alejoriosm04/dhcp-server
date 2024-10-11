@@ -7,7 +7,7 @@
 #include <time.h>
 
 #define BUFFER_SIZE 1024
-#define POOL_SIZE 100  
+#define POOL_SIZE 100
 #define LOG_FILE "dhcp_server.log"
 
 typedef struct {
@@ -67,7 +67,6 @@ int load_network_config(const char* filename, char* subnet_mask, char* default_g
     fclose(file);
     return 0;
 }
-
 
 // Función para generar el rango de IPs y asignar parámetros de red
 int generate_ip_pool(const char *ip_start, const char *ip_end) {
@@ -149,20 +148,25 @@ void renew_lease(const char* ip, const char* mac_address, time_t lease_duration)
     }
 }
 
-// Función para liberar una IP
-void release_ip(const char* ip) {
+// Función para liberar una IP (actualizada para recibir la MAC y validar)
+void release_ip(const char* ip, const char* mac_address) {
     for (int i = 0; i < POOL_SIZE; ++i) {
         if (strcmp(lease_table[i].ip, ip) == 0) {
-            lease_table[i].assigned = 0;
-            lease_table[i].lease_start = 0;
-            lease_table[i].lease_duration = 0;
-            memset(lease_table[i].mac_address, 0, sizeof(lease_table[i].mac_address));
+            if (strcmp(lease_table[i].mac_address, mac_address) == 0) {
+                lease_table[i].assigned = 0;
+                lease_table[i].lease_start = 0;
+                lease_table[i].lease_duration = 0;
+                memset(lease_table[i].mac_address, 0, sizeof(lease_table[i].mac_address));
 
-            char log_entry[BUFFER_SIZE];
-            snprintf(log_entry, BUFFER_SIZE, "IP %s liberada y disponible para nuevos clientes", ip);
-            log_message("INFO", log_entry);
+                char log_entry[BUFFER_SIZE];
+                snprintf(log_entry, BUFFER_SIZE, "IP %s liberada y disponible para nuevos clientes", ip);
+                log_message("INFO", log_entry);
 
-            printf("%s\n", log_entry);
+                printf("%s\n", log_entry);
+            } else {
+                printf("La MAC %s no coincide con el registro para la IP %s\n", mac_address, ip);
+                log_message("WARNING", "Intento de liberar una IP con una MAC que no coincide.");
+            }
             break;
         }
     }
@@ -187,7 +191,8 @@ void check_expired_leases() {
         }
     }
 }
-// Modificar la función assign_ip para recibir los parámetros de red
+
+// Función para asignar una IP disponible
 lease_record* assign_ip(const char* client_mac, const char* subnet_mask, const char* default_gateway, const char* dns_server) {
     for (int i = 0; i < POOL_SIZE; ++i) {
         if (!lease_table[i].assigned) {
@@ -204,8 +209,6 @@ lease_record* assign_ip(const char* client_mac, const char* subnet_mask, const c
     }
     return NULL; // No hay direcciones disponibles
 }
-
-
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
@@ -350,6 +353,7 @@ int main(int argc, char *argv[]) {
                     log_message("ERROR", "No se pudo extraer la IP o la MAC del cliente en DHCPREQUEST.");
                 }
             } else if (strstr(buffer, "DHCPRELEASE")) {
+                // Manejo del mensaje DHCPRELEASE
                 // Extraer la IP y MAC del cliente
                 char released_ip[16] = {0};
                 char client_mac[18] = {0};
@@ -358,7 +362,7 @@ int main(int argc, char *argv[]) {
 
                 if (parsed_fields == 2) {
                     // Liberar la IP
-                    release_ip(released_ip);
+                    release_ip(released_ip, client_mac);
                     printf("IP liberada: %s por cliente %s\n", released_ip, client_mac);
                 } else {
                     printf("No se pudo extraer la IP o la MAC del cliente en DHCPRELEASE.\n");
