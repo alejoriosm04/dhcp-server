@@ -19,4 +19,4 @@ RUN gcc -Wall -Wextra -o /home/dhcp_client /home/dhcp_client.c -lpthread
 WORKDIR /home
 
 # Comando por defecto al iniciar el contenedor
-CMD ["./dhcp_client"]
+CMD ./dhcp_client && tail -f /dev/null

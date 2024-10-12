@@ -135,11 +135,16 @@ void register_lease(lease_record* lease, const char* mac_address, time_t lease_d
     lease->assigned = 1;
     strcpy(lease->mac_address, mac_address);
 
+    // Mejorar el formato de la salida en consola
+    printf("\n**** LEASE REGISTRADO ****\n");
+    printf("IP Asignada: %s\n", lease->ip);
+    printf("MAC Cliente: %s\n", mac_address);
+    printf("Duración Lease: %ld segundos\n", lease_duration);
+    printf("**************************\n\n");
+
     char log_entry[BUFFER_SIZE];
     snprintf(log_entry, BUFFER_SIZE, "Lease registrado para la IP %s con MAC %s por %ld segundos", lease->ip, mac_address, lease_duration);
     log_message("INFO", log_entry);
-
-    printf("%s\n", log_entry);
 }
 
 // Función para renovar un lease
@@ -147,14 +152,19 @@ void renew_lease(lease_record* lease, time_t lease_duration) {
     lease->lease_start = time(NULL);
     lease->lease_duration = lease_duration;
 
+    // Mejorar el formato de la salida en consola
+    printf("\n---- LEASE RENOVADO ----\n");
+    printf("IP Renovada: %s\n", lease->ip);
+    printf("MAC Cliente: %s\n", lease->mac_address);
+    printf("Nueva Duración: %ld segundos\n", lease_duration);
+    printf("------------------------\n\n");
+
     char log_entry[BUFFER_SIZE];
     snprintf(log_entry, BUFFER_SIZE, "Lease renovado para la IP %s con MAC %s por %ld segundos", lease->ip, lease->mac_address, lease_duration);
     log_message("INFO", log_entry);
-
-    printf("%s\n", log_entry);
 }
 
-// Función para liberar una IP (actualizada para recibir la MAC y validar)
+// Función para liberar una IP
 void release_ip(const char* ip, const char* mac_address) {
     pthread_mutex_lock(&lease_table_mutex);
     for (int i = 0; i < POOL_SIZE; ++i) {
@@ -165,11 +175,14 @@ void release_ip(const char* ip, const char* mac_address) {
                 lease_table[i].lease_duration = 0;
                 memset(lease_table[i].mac_address, 0, sizeof(lease_table[i].mac_address));
 
+                printf("\n---- IP LIBERADA ----\n");
+                printf("IP: %s\n", ip);
+                printf("MAC Cliente: %s\n", mac_address);
+                printf("---------------------\n\n");
+
                 char log_entry[BUFFER_SIZE];
                 snprintf(log_entry, BUFFER_SIZE, "IP %s liberada y disponible para nuevos clientes", ip);
                 log_message("INFO", log_entry);
-
-                printf("%s\n", log_entry);
             } else {
                 printf("La MAC %s no coincide con el registro para la IP %s\n", mac_address, ip);
                 log_message("WARNING", "Intento de liberar una IP con una MAC que no coincide.");
@@ -230,17 +243,6 @@ lease_record* assign_ip(const char* client_mac, const char* subnet_mask, const c
     }
     pthread_mutex_unlock(&lease_table_mutex);
     return NULL; // No hay direcciones disponibles
-}
-
-void mark_ip_as_conflicted(const char* ip) {
-    pthread_mutex_lock(&lease_table_mutex);
-    for (int i = 0; i < POOL_SIZE; ++i) {
-        if (strcmp(lease_table[i].ip, ip) == 0) {
-            lease_table[i].conflicted = 1;  // Marca la IP como en conflicto
-            break;
-        }
-    }
-    pthread_mutex_unlock(&lease_table_mutex);
 }
 
 // Función para manejar el mensaje DHCPDECLINE enviado por el cliente
@@ -306,7 +308,10 @@ void* handle_client(void* arg) {
 
                 // Enviar el DHCPOFFER al cliente
                 sendto(udp_socket, offer_message, strlen(offer_message) + 1, 0, (struct sockaddr *)&client_addr, client_addr_len);
-                printf("Oferta enviada a %s:%d -- %s\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), offer_message);
+                printf("\n---- OFERTA ENVIADA ----\n");
+                printf("Cliente IP: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+                printf("Mensaje: %s\n", offer_message);
+                printf("------------------------\n\n");
             } else {
                 printf("No hay direcciones IP disponibles para ofrecer.\n");
                 log_message("WARNING", "No hay direcciones IP disponibles para ofrecer a un cliente.");
@@ -324,7 +329,11 @@ void* handle_client(void* arg) {
         int parsed_fields = sscanf(buffer, "DHCPREQUEST: IP=%15[^;]; MAC %17s", requested_ip, client_mac);
 
         if (parsed_fields == 2) {
-            printf("Solicitud de renovación DHCPREQUEST recibida para la IP: %s\n", requested_ip);
+            printf("\n---- SOLICITUD RECIBIDA (DHCPREQUEST) ----\n");
+            printf("IP Solicitada: %s\n", requested_ip);
+            printf("MAC Cliente: %s\n", client_mac);
+            printf("------------------------------------------\n");
+
             // Verificar si la IP solicitada está asignada al cliente
             int found = 0;
             lease_record* lease = NULL;
@@ -351,20 +360,23 @@ void* handle_client(void* arg) {
 
                 // Enviar el DHCPACK al cliente
                 sendto(udp_socket, ack_message, strlen(ack_message) + 1, 0, (struct sockaddr *)&client_addr, client_addr_len);
-                printf("Confirmación enviada a %s:%d -- %s\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), ack_message);
-
-            
-
+                printf("\n---- CONFIRMACIÓN ENVIADA (DHCPACK) ----\n");
+                printf("IP Asignada: %s\n", lease->ip);
+                printf("MAC Cliente: %s\n", client_mac);
+                printf("Mensaje: %s\n", ack_message);
+                printf("------------------------------------------\n");
             } else {
                 printf("La IP solicitada %s no está asignada a la MAC %s\n", requested_ip, client_mac);
                 log_message("WARNING", "La IP solicitada no está asignada al cliente.");
 
-                // Enviar DHCPNAK al cliente, iberar ip
-
+                // Enviar DHCPNAK al cliente, liberar ip
                 char nak_message[BUFFER_SIZE];
                 snprintf(nak_message, BUFFER_SIZE, "DHCPNAK: Solicitud inválida para IP %s y MAC %s", requested_ip, client_mac);
                 sendto(udp_socket, nak_message, strlen(nak_message) + 1, 0, (struct sockaddr *)&client_addr, client_addr_len);
-                printf("DHCPNAK enviado a %s:%d -- %s\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), nak_message);
+                printf("\n---- DHCPNAK ENVIADO ----\n");
+                printf("IP Solicitada: %s\n", requested_ip);
+                printf("Mensaje: %s\n", nak_message);
+                printf("--------------------------\n\n");
             }
         } else {
             printf("No se pudo extraer la IP o la MAC del cliente en DHCPREQUEST.\n");
