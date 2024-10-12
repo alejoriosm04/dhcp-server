@@ -15,7 +15,7 @@ COPY server/dhcp_server.c /home/dhcp_server.c
 COPY network_config.txt /home/network_config.txt
 
 # Compilar el servidor DHCP
-RUN gcc -Wall -Wextra -o /home/dhcp_server /home/dhcp_server.c
+RUN gcc -Wall -Wextra -o /home/dhcp_server /home/dhcp_server.c -lpthread
 
 # Exponer el puerto 67/UDP
 EXPOSE 67/udp

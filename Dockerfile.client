@@ -1,5 +1,4 @@
 # Dockerfile.client
-
 FROM ubuntu:20.04
 
 # Instalar dependencias y herramientas necesarias
@@ -13,8 +12,8 @@ RUN apt-get update && apt-get install -y \
 # Copiar el código fuente del cliente al contenedor
 COPY client/dhcp_client.c /home/dhcp_client.c
 
-# Compilar el cliente DHCP
-RUN gcc -Wall -Wextra -o /home/dhcp_client /home/dhcp_client.c
+# Compilar el cliente DHCP con la biblioteca pthread
+RUN gcc -Wall -Wextra -o /home/dhcp_client /home/dhcp_client.c -lpthread
 
 # Establecer el directorio de trabajo
 WORKDIR /home
