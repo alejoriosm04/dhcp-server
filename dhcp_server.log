@@ -265,3 +265,245 @@
 [2024-10-11 13:31:43] INFO: Lease renovado para la IP 192.168.1.14 con MAC 00:cc:cc:a3:aa:e0 por 3600 segundos
 [2024-10-11 13:31:43] INFO: Lease renovado para la IP 192.168.1.12 con MAC 00:64:cb:4f:bd:ab por 3600 segundos
 [2024-10-11 13:31:43] INFO: Lease renovado para la IP 192.168.1.10 con MAC 00:7b:a2:18:c1:0b por 3600 segundos
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.11. Liberando la dirección.
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.12. Liberando la dirección.
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.13. Liberando la dirección.
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.14. Liberando la dirección.
+[2024-10-11 17:18:00] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:17:ec:3d:51:97 por 0 segundos
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 17:18:00] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 17:18:00] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:17:ec:3d:51:97 por 0 segundos
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 17:18:00] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 17:18:00] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:17:ec:3d:51:97 por 0 segundos
+[2024-10-11 17:18:00] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 17:18:00] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 17:19:46] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:69:69:e9:18:75 por 3600 segundos
+[2024-10-11 17:19:46] INFO: Lease renovado para la IP 192.168.1.10 con MAC 00:69:69:e9:18:75 por 3600 segundos
+[2024-10-11 20:42:25] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:2e:ea:eb:e4:04 por 3600 segundos
+[2024-10-11 20:42:25] INFO: Lease renovado para la IP 192.168.1.10 con MAC 00:2e:ea:eb:e4:04 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease registrado para la IP 192.168.1.11 con MAC 00:7c:d0:46:96:a5 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease registrado para la IP 192.168.1.12 con MAC 00:6c:fc:f3:90:c3 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease renovado para la IP 192.168.1.11 con MAC 00:7c:d0:46:96:a5 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease registrado para la IP 192.168.1.13 con MAC 00:78:86:76:d6:c2 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease registrado para la IP 192.168.1.14 con MAC 00:c3:00:5a:41:41 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease renovado para la IP 192.168.1.13 con MAC 00:78:86:76:d6:c2 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease renovado para la IP 192.168.1.14 con MAC 00:c3:00:5a:41:41 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease renovado para la IP 192.168.1.12 con MAC 00:6c:fc:f3:90:c3 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease registrado para la IP 192.168.1.15 con MAC 00:74:f7:56:17:b5 por 3600 segundos
+[2024-10-11 20:42:56] INFO: Lease renovado para la IP 192.168.1.15 con MAC 00:74:f7:56:17:b5 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.16 con MAC 00:52:63:9b:be:a8 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.17 con MAC 00:0b:17:3e:57:ce por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.18 con MAC 00:d9:c9:8f:e3:35 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.20 con MAC 00:58:d0:fb:1c:43 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.19 con MAC 00:5d:e1:00:45:b7 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.18 con MAC 00:d9:c9:8f:e3:35 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.20 con MAC 00:58:d0:fb:1c:43 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.17 con MAC 00:0b:17:3e:57:ce por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.16 con MAC 00:52:63:9b:be:a8 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.19 con MAC 00:5d:e1:00:45:b7 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.22 con MAC 00:b2:6b:2c:97:4e por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.23 con MAC 00:bb:66:63:19:6a por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.21 con MAC 00:17:87:c9:25:45 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.21 con MAC 00:17:87:c9:25:45 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.24 con MAC 00:17:71:5d:53:e5 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease registrado para la IP 192.168.1.25 con MAC 00:54:b1:20:61:03 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.22 con MAC 00:b2:6b:2c:97:4e por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.23 con MAC 00:bb:66:63:19:6a por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.24 con MAC 00:17:71:5d:53:e5 por 3600 segundos
+[2024-10-11 20:44:29] INFO: Lease renovado para la IP 192.168.1.25 con MAC 00:54:b1:20:61:03 por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease registrado para la IP 192.168.1.26 con MAC 00:2a:fa:71:37:f6 por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease registrado para la IP 192.168.1.27 con MAC 00:4a:34:bd:9f:c2 por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease registrado para la IP 192.168.1.28 con MAC 00:db:a6:f3:56:fc por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease renovado para la IP 192.168.1.27 con MAC 00:4a:34:bd:9f:c2 por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease registrado para la IP 192.168.1.29 con MAC 00:7f:1e:d8:08:dc por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease renovado para la IP 192.168.1.28 con MAC 00:db:a6:f3:56:fc por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease renovado para la IP 192.168.1.26 con MAC 00:2a:fa:71:37:f6 por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease registrado para la IP 192.168.1.30 con MAC 00:c1:5f:2e:cc:cc por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease renovado para la IP 192.168.1.29 con MAC 00:7f:1e:d8:08:dc por 3600 segundos
+[2024-10-11 20:44:30] INFO: Lease renovado para la IP 192.168.1.30 con MAC 00:c1:5f:2e:cc:cc por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease registrado para la IP 192.168.1.31 con MAC 00:37:e0:58:60:ce por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease registrado para la IP 192.168.1.32 con MAC 00:18:20:6d:b7:cc por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease renovado para la IP 192.168.1.31 con MAC 00:37:e0:58:60:ce por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease registrado para la IP 192.168.1.33 con MAC 00:f7:45:fc:bd:20 por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease renovado para la IP 192.168.1.32 con MAC 00:18:20:6d:b7:cc por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease registrado para la IP 192.168.1.34 con MAC 00:ab:87:cb:4c:6a por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease renovado para la IP 192.168.1.33 con MAC 00:f7:45:fc:bd:20 por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease registrado para la IP 192.168.1.35 con MAC 00:63:8c:61:90:e2 por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease renovado para la IP 192.168.1.34 con MAC 00:ab:87:cb:4c:6a por 3600 segundos
+[2024-10-11 20:44:31] INFO: Lease renovado para la IP 192.168.1.35 con MAC 00:63:8c:61:90:e2 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease registrado para la IP 192.168.1.36 con MAC 00:ef:0b:01:20:ea por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease registrado para la IP 192.168.1.37 con MAC 00:ee:e0:52:63:03 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease renovado para la IP 192.168.1.36 con MAC 00:ef:0b:01:20:ea por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease renovado para la IP 192.168.1.37 con MAC 00:ee:e0:52:63:03 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease registrado para la IP 192.168.1.38 con MAC 00:e3:14:dd:d6:99 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease renovado para la IP 192.168.1.38 con MAC 00:e3:14:dd:d6:99 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease registrado para la IP 192.168.1.39 con MAC 00:a5:9f:36:ab:30 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease renovado para la IP 192.168.1.39 con MAC 00:a5:9f:36:ab:30 por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease registrado para la IP 192.168.1.40 con MAC 00:09:30:4a:8a:1c por 3600 segundos
+[2024-10-11 20:44:32] INFO: Lease renovado para la IP 192.168.1.40 con MAC 00:09:30:4a:8a:1c por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease registrado para la IP 192.168.1.41 con MAC 00:49:01:7d:7d:72 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease registrado para la IP 192.168.1.42 con MAC 00:26:df:42:e8:d4 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease registrado para la IP 192.168.1.43 con MAC 00:c8:5d:c7:9a:19 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease renovado para la IP 192.168.1.43 con MAC 00:c8:5d:c7:9a:19 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease renovado para la IP 192.168.1.41 con MAC 00:49:01:7d:7d:72 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease renovado para la IP 192.168.1.42 con MAC 00:26:df:42:e8:d4 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease registrado para la IP 192.168.1.44 con MAC 00:d7:b6:c2:d1:a4 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease registrado para la IP 192.168.1.45 con MAC 00:63:77:44:5c:2b por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease renovado para la IP 192.168.1.44 con MAC 00:d7:b6:c2:d1:a4 por 3600 segundos
+[2024-10-11 20:44:33] INFO: Lease renovado para la IP 192.168.1.45 con MAC 00:63:77:44:5c:2b por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease registrado para la IP 192.168.1.46 con MAC 00:18:47:af:93:9a por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease registrado para la IP 192.168.1.47 con MAC 00:27:0a:25:b3:da por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease registrado para la IP 192.168.1.48 con MAC 00:43:e6:38:c6:9d por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease renovado para la IP 192.168.1.46 con MAC 00:18:47:af:93:9a por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease renovado para la IP 192.168.1.47 con MAC 00:27:0a:25:b3:da por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease renovado para la IP 192.168.1.48 con MAC 00:43:e6:38:c6:9d por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease registrado para la IP 192.168.1.49 con MAC 00:e2:ec:06:b4:5a por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease registrado para la IP 192.168.1.50 con MAC 00:b4:76:f9:72:de por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease renovado para la IP 192.168.1.49 con MAC 00:e2:ec:06:b4:5a por 3600 segundos
+[2024-10-11 20:44:34] INFO: Lease renovado para la IP 192.168.1.50 con MAC 00:b4:76:f9:72:de por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.51 con MAC 00:26:1d:98:e2:7e por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.52 con MAC 00:92:40:69:16:c8 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.53 con MAC 00:67:2c:e5:5a:c6 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.54 con MAC 00:83:be:92:23:59 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.51 con MAC 00:26:1d:98:e2:7e por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.55 con MAC 00:15:dd:38:f0:12 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.52 con MAC 00:92:40:69:16:c8 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.53 con MAC 00:67:2c:e5:5a:c6 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.55 con MAC 00:15:dd:38:f0:12 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.54 con MAC 00:83:be:92:23:59 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.57 con MAC 00:95:e6:d4:9f:58 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.58 con MAC 00:62:e3:cb:3e:8b por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.56 con MAC 00:36:55:79:55:dd por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.57 con MAC 00:95:e6:d4:9f:58 por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.59 con MAC 00:6c:08:ed:85:2e por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.56 con MAC 00:36:55:79:55:dd por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.58 con MAC 00:62:e3:cb:3e:8b por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.59 con MAC 00:6c:08:ed:85:2e por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease registrado para la IP 192.168.1.60 con MAC 00:f6:09:ec:2d:ca por 3600 segundos
+[2024-10-11 20:44:35] INFO: Lease renovado para la IP 192.168.1.60 con MAC 00:f6:09:ec:2d:ca por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.61 con MAC 00:fd:0a:3e:43:c5 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.62 con MAC 00:ab:ff:ae:a6:e2 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.63 con MAC 00:69:f4:3d:c4:f9 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.61 con MAC 00:fd:0a:3e:43:c5 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.62 con MAC 00:ab:ff:ae:a6:e2 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.64 con MAC 00:e0:64:a8:ab:52 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.63 con MAC 00:69:f4:3d:c4:f9 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.64 con MAC 00:e0:64:a8:ab:52 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.65 con MAC 00:19:d2:08:a5:6c por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.65 con MAC 00:19:d2:08:a5:6c por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.66 con MAC 00:53:a1:43:8b:7c por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.68 con MAC 00:ca:51:c1:da:fb por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.69 con MAC 00:ce:c9:f5:85:7c por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.67 con MAC 00:76:93:73:eb:e9 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.68 con MAC 00:ca:51:c1:da:fb por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.66 con MAC 00:53:a1:43:8b:7c por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.67 con MAC 00:76:93:73:eb:e9 por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease registrado para la IP 192.168.1.70 con MAC 00:1d:c2:7f:10:3a por 3600 segundos
+[2024-10-11 20:44:36] INFO: Lease renovado para la IP 192.168.1.70 con MAC 00:1d:c2:7f:10:3a por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease renovado para la IP 192.168.1.69 con MAC 00:ce:c9:f5:85:7c por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease registrado para la IP 192.168.1.71 con MAC 00:8f:d0:e6:49:a0 por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease registrado para la IP 192.168.1.72 con MAC 00:b8:68:b4:6f:57 por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease registrado para la IP 192.168.1.73 con MAC 00:6f:a3:86:21:cb por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease renovado para la IP 192.168.1.73 con MAC 00:6f:a3:86:21:cb por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease renovado para la IP 192.168.1.71 con MAC 00:8f:d0:e6:49:a0 por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease renovado para la IP 192.168.1.72 con MAC 00:b8:68:b4:6f:57 por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease registrado para la IP 192.168.1.74 con MAC 00:79:29:04:bc:06 por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease renovado para la IP 192.168.1.74 con MAC 00:79:29:04:bc:06 por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease registrado para la IP 192.168.1.75 con MAC 00:ea:f0:30:5d:cf por 3600 segundos
+[2024-10-11 20:44:37] INFO: Lease renovado para la IP 192.168.1.75 con MAC 00:ea:f0:30:5d:cf por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.76 con MAC 00:2e:58:22:72:f7 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.78 con MAC 00:a3:ba:33:43:c5 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.79 con MAC 00:7f:0f:a5:c6:c8 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.80 con MAC 00:ec:6b:48:9c:ce por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.77 con MAC 00:27:88:94:bb:09 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.79 con MAC 00:7f:0f:a5:c6:c8 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.80 con MAC 00:ec:6b:48:9c:ce por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.78 con MAC 00:a3:ba:33:43:c5 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.77 con MAC 00:27:88:94:bb:09 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.76 con MAC 00:2e:58:22:72:f7 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.81 con MAC 00:c9:96:fb:d8:de por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.82 con MAC 00:8a:ae:38:7f:79 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.83 con MAC 00:8c:9f:6c:08:5e por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.82 con MAC 00:8a:ae:38:7f:79 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.84 con MAC 00:31:55:e4:bf:8d por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.84 con MAC 00:31:55:e4:bf:8d por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.81 con MAC 00:c9:96:fb:d8:de por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.83 con MAC 00:8c:9f:6c:08:5e por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease registrado para la IP 192.168.1.85 con MAC 00:80:a1:81:29:43 por 3600 segundos
+[2024-10-11 20:44:38] INFO: Lease renovado para la IP 192.168.1.85 con MAC 00:80:a1:81:29:43 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease registrado para la IP 192.168.1.86 con MAC 00:67:a7:37:3b:92 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease registrado para la IP 192.168.1.87 con MAC 00:c8:e3:06:97:a8 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease renovado para la IP 192.168.1.87 con MAC 00:c8:e3:06:97:a8 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease renovado para la IP 192.168.1.86 con MAC 00:67:a7:37:3b:92 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease registrado para la IP 192.168.1.88 con MAC 00:8c:20:f0:e9:d9 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease registrado para la IP 192.168.1.89 con MAC 00:ac:a9:db:44:19 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease renovado para la IP 192.168.1.88 con MAC 00:8c:20:f0:e9:d9 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease registrado para la IP 192.168.1.90 con MAC 00:e3:36:05:a6:50 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease renovado para la IP 192.168.1.89 con MAC 00:ac:a9:db:44:19 por 3600 segundos
+[2024-10-11 20:44:39] INFO: Lease renovado para la IP 192.168.1.90 con MAC 00:e3:36:05:a6:50 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease registrado para la IP 192.168.1.91 con MAC 00:40:3d:26:13:af por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease registrado para la IP 192.168.1.92 con MAC 00:a9:b4:e2:90:04 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease registrado para la IP 192.168.1.93 con MAC 00:51:1d:ad:07:f6 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease renovado para la IP 192.168.1.92 con MAC 00:a9:b4:e2:90:04 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease renovado para la IP 192.168.1.91 con MAC 00:40:3d:26:13:af por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease renovado para la IP 192.168.1.93 con MAC 00:51:1d:ad:07:f6 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease registrado para la IP 192.168.1.94 con MAC 00:4b:0f:da:38:06 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease renovado para la IP 192.168.1.94 con MAC 00:4b:0f:da:38:06 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease registrado para la IP 192.168.1.95 con MAC 00:85:53:d3:a6:b7 por 3600 segundos
+[2024-10-11 20:44:40] INFO: Lease renovado para la IP 192.168.1.95 con MAC 00:85:53:d3:a6:b7 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease registrado para la IP 192.168.1.96 con MAC 00:ef:0d:07:d5:44 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease registrado para la IP 192.168.1.98 con MAC 00:87:41:94:3e:3d por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease registrado para la IP 192.168.1.97 con MAC 00:b3:46:42:31:d5 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease registrado para la IP 192.168.1.99 con MAC 00:ca:32:db:d6:0e por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease registrado para la IP 192.168.1.100 con MAC 00:c4:46:16:09:a2 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease renovado para la IP 192.168.1.97 con MAC 00:b3:46:42:31:d5 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease renovado para la IP 192.168.1.100 con MAC 00:c4:46:16:09:a2 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease renovado para la IP 192.168.1.96 con MAC 00:ef:0d:07:d5:44 por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease renovado para la IP 192.168.1.99 con MAC 00:ca:32:db:d6:0e por 3600 segundos
+[2024-10-11 20:45:03] INFO: Lease renovado para la IP 192.168.1.98 con MAC 00:87:41:94:3e:3d por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:39:c2:8f:83:75 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:39:c2:8f:83:75 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:c2:45:f3:c3:17 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:c2:45:f3:c3:17 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:c2:45:f3:c3:17 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:c7:d0:fc:76:40 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:c7:d0:fc:76:40 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:c7:d0:fc:76:40 por 3600 segundos
+[2024-10-11 20:45:23] INFO: Lease registrado para la IP  con MAC 00:19:b2:50:47:37 por 3600 segundos
+[2024-10-11 20:45:23] WARNING: No hay direcciones IP disponibles para ofrecer a un cliente.
+[2024-10-11 20:45:23] WARNING: No hay direcciones IP disponibles para ofrecer a un cliente.
+[2024-10-11 20:45:23] WARNING: No hay direcciones IP disponibles para ofrecer a un cliente.
+[2024-10-11 20:59:24] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:ca:87:25:f2:48 por 3600 segundos
+[2024-10-11 20:59:24] INFO: Lease renovado para la IP 192.168.1.10 con MAC 00:ca:87:25:f2:48 por 3600 segundos
+[2024-10-11 21:06:23] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:7d:fe:27:07:50 por 3600 segundos
+[2024-10-11 21:22:15] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:43:6d:62:2b:3f por 3600 segundos
+[2024-10-11 21:23:05] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:b7:86:45:fa:25 por 20 segundos
+[2024-10-11 21:25:31] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:25:31] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:85:1f:98:cb:f1 por 0 segundos
+[2024-10-11 21:25:31] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:25:31] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 21:25:31] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:85:1f:98:cb:f1 por 0 segundos
+[2024-10-11 21:25:31] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:25:31] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 21:25:31] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:85:1f:98:cb:f1 por 0 segundos
+[2024-10-11 21:25:31] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:25:31] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 21:28:55] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:5f:8d:10:2d:a2 por 20 segundos
+[2024-10-11 21:28:55] INFO: Lease renovado para la IP 192.168.1.10 con MAC 00:5f:8d:10:2d:a2 por 20 segundos
+[2024-10-11 21:29:24] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:29:24] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:7d:f9:3a:ca:19 por 0 segundos
+[2024-10-11 21:29:24] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:29:24] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 21:29:24] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:7d:f9:3a:ca:19 por 0 segundos
+[2024-10-11 21:29:24] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:29:24] WARNING: La IP solicitada no está asignada al cliente.
+[2024-10-11 21:29:24] INFO: Lease registrado para la IP 192.168.1.10 con MAC 00:7d:f9:3a:ca:19 por 0 segundos
+[2024-10-11 21:29:24] INFO: Lease expirado para la IP 192.168.1.10. Liberando la dirección.
+[2024-10-11 21:29:24] WARNING: La IP solicitada no está asignada al cliente.
+[Fri Oct 11 21:45:33 2024] WARNING: La IP solicitada no está asignada al cliente.
+[Fri Oct 11 21:46:37 2024] WARNING: La IP solicitada no está asignada al cliente.
+[Fri Oct 11 21:48:04 2024] WARNING: La IP solicitada no está asignada al cliente.
+[Fri Oct 11 22:13:15 2024] WARNING: La IP solicitada no está asignada al cliente.
+[Fri Oct 11 22:56:09 2024] WARNING: La IP solicitada ya está asignada a otro cliente.
