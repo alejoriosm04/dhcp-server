@@ -123,12 +123,12 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
 
     **Terminal1**
     ```bash
-    ssudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    udo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
     ```
 
     **Terminal2**
     ```bash
-    ssudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    sudo docker run -it --name dhcp_client2 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
     ```
 
 ---

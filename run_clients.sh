@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Número de clientes que deseas ejecutar
-NUM_CLIENTS=1  
+NUM_CLIENTS=3  
 
 if ! docker network ls | grep -q dhcp_net; then
   echo "Creando red de Docker..."
