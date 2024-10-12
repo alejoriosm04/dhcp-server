@@ -17,10 +17,24 @@ void generate_random_mac(char* mac) {
              rand() % 256, rand() % 256);
 }
 
+// Función para enviar DHCPRELEASE al servidor
+void send_dhcp_release(int udp_socket, struct sockaddr_in* server_addr, const char* assigned_ip, const char* mac_address) {
+    char release_message[BUFFER_SIZE];
+    snprintf(release_message, BUFFER_SIZE, "DHCPRELEASE: IP=%s; MAC %s", assigned_ip, mac_address);
+
+    if (sendto(udp_socket, release_message, strlen(release_message) + 1, 0,
+               (struct sockaddr *)server_addr, sizeof(*server_addr)) < 0) {
+        perror("No se pudo enviar el mensaje DHCPRELEASE");
+    } else {
+        printf("Mensaje DHCPRELEASE enviado al servidor DHCP liberando IP %s\n", assigned_ip);
+    }
+}
+
 int main() {
     char buffer[BUFFER_SIZE];
     struct sockaddr_in server_addr, client_addr;
     char mac_address[18];
+    char assigned_ip[16] = ""; // Inicializar la IP asignada
 
     // Generar una dirección MAC aleatoria
     generate_random_mac(mac_address);
@@ -85,7 +99,6 @@ int main() {
             printf("Oferta recibida del servidor DHCP: %s\n", buffer);
 
             // Variables para almacenar la información
-            char assigned_ip[16];
             char subnet_mask[16];
             char default_gateway[16];
             char dns_server[16];
@@ -155,7 +168,16 @@ int main() {
 
     if (retries == MAX_RETRIES) {
         printf("No se pudo obtener una oferta del servidor después de %d intentos.\n", MAX_RETRIES);
+        close(udp_socket);
+        return EXIT_FAILURE;
     }
+
+    // Mantener el cliente activo hasta que el usuario decida terminar
+    printf("\nCliente DHCP activo. Presione Enter para liberar la IP y salir...\n");
+    getchar();  // Espera a que el usuario presione Enter
+
+    // Enviar DHCPRELEASE al servidor al terminar
+    send_dhcp_release(udp_socket, &server_addr, assigned_ip, mac_address);
 
     close(udp_socket);
     return EXIT_SUCCESS;

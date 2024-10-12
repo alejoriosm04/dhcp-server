@@ -68,6 +68,69 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
     ```
 
 ---
+### Guía para Utilizar Docker
+1. **Instalar Docker**:
+
+    En Ubuntu:
+    ```bash
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    ```
+
+2. **Construir la Imagen del Cliente**:
+
+    Ejecuta el siguiente comando en la terminal, en el directorio donde se encuentra el Dockerfile.client:
+
+    En Ubuntu
+    ```bash
+    sudo docker build -t dhcp_client -f Dockerfile.client .
+    ```
+3. **Construir la Imagen del Servidor**:
+
+    Ejecuta el siguiente comando en la terminal, en el directorio donde se encuentra el Dockerfile.server:
+
+    En Ubuntu
+    ```bash
+    sudo docker build -t dhcp_server -f Dockerfile.server .
+    ```
+
+4. **Crear una Red Docker Personalizada**:
+
+    Creamos una red Docker tipo bridge para que los contenedores puedan comunicarse entre sí.
+
+    En Ubuntu
+    ```bash
+    sudo docker network create --subnet=192.168.1.0/24 dhcp_net
+    ```
+
+5. **Ejecutar el Contenedor del Servidor DHCP**:
+
+    Inicia el servidor DHCP en un contenedor conectado a la red dhcp_net.
+
+    En Ubuntu
+    ```bash
+    sudo docker run -it --name dhcp_server --net dhcp_net --ip 192.168.1.2 --cap-add=NET_ADMIN dhcp_server
+    ```
+
+6. **Ejecutar el Contenedor de los clientes DHCP**:
+
+    Inicia tantos clientes como desees en diferentes terminales, cada uno en su propio contenedor.
+
+    En Ubuntu
+
+    **Terminal1**
+    ```bash
+    ssudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    ```
+
+    **Terminal2**
+    ```bash
+    ssudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    ```
+
+---
 
 ### Flujo Básico de Comunicación
 
