@@ -24,4 +24,4 @@ EXPOSE 67/udp
 WORKDIR /home
 
 # Comando por defecto al iniciar el contenedor
-CMD ["./dhcp_server", "192.168.1.10", "192.168.1.12", "network_config.txt"]
+CMD ["./dhcp_server", "192.168.1.10", "192.168.1.11", "network_config.txt"]

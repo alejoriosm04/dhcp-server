@@ -180,61 +180,68 @@ int main() {
         printf("Mensaje DHCPDISCOVER enviado por broadcast al puerto 67\n");
         printf("-------------------------------\n");
 
-        // Recibir oferta del servidor (DHCPOFFER)
+        // Recibir respuesta del servidor
         socklen_t server_addr_len = sizeof(server_addr);
         int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
                                       (struct sockaddr *)&server_addr, &server_addr_len);
 
-        if (bytes_received > 0 && strstr(buffer, "DHCPOFFER")) {
+        if (bytes_received > 0) {
             buffer[bytes_received] = '\0';
-            printf("\n---- Oferta Recibida ----\n");
-            printf("Oferta del servidor DHCP: %s\n", buffer);
-            printf("--------------------------\n");
-
-            // Variables para almacenar la información
-            char subnet_mask[16];
-            char default_gateway[16];
-            char dns_server[16];
-            long lease_time;
-
-            // Parsear el mensaje DHCPOFFER
-            int parsed_fields = sscanf(buffer,
-                "DHCPOFFER: IP=%15[^;]; MASK=%15[^;]; GATEWAY=%15[^;]; DNS=%15[^;]; LEASE=%ld",
-                assigned_ip, subnet_mask, default_gateway, dns_server, &lease_time);
-
-            if (parsed_fields == 5) {
-                printf("\n---- Información Recibida ----\n");
-                printf("IP Asignada: %s\n", assigned_ip);
-                printf("Máscara de Subred: %s\n", subnet_mask);
-                printf("Puerta de Enlace Predeterminada: %s\n", default_gateway);
-                printf("Servidor DNS: %s\n", dns_server);
-                printf("Duración del Lease: %ld segundos\n", lease_time);
-                printf("-------------------------------\n");
-
-                // Crear hilo para manejar la renovación automática del lease
-                lease_params_t params = {udp_socket, &server_addr, assigned_ip, mac_address, lease_time};
-                pthread_t renewal_thread;
-                pthread_create(&renewal_thread, NULL, lease_renewal_loop, (void*)&params);
-
-                // Crear hilo para escuchar el Enter
-                pthread_t enter_thread;
-                pthread_create(&enter_thread, NULL, listen_for_enter, NULL);
-
-                // Esperar a que el usuario presione Enter
-                pthread_join(enter_thread, NULL);
-
-                // Enviar DHCPRELEASE al servidor al terminar
-                send_dhcp_release(udp_socket, &server_addr, assigned_ip, mac_address);
-
-                // Cerrar el socket y terminar
+            if (strstr(buffer, "DHCPNOIP")) {
+                printf("DHCPNOIP: El servidor DHCP informó que no hay direcciones IP disponibles.\n");
                 close(udp_socket);
-                return EXIT_SUCCESS;
+                return EXIT_FAILURE;
+            } else if  (strstr(buffer, "DHCPOFFER")) {
+                printf("\n---- Oferta Recibida ----\n");
+                printf("Oferta del servidor DHCP: %s\n", buffer);
+                printf("--------------------------\n");
 
+                // Variables para almacenar la información
+                char subnet_mask[16];
+                char default_gateway[16];
+                char dns_server[16];
+                long lease_time;
+
+                // Parsear el mensaje DHCPOFFER
+                int parsed_fields = sscanf(buffer,
+                    "DHCPOFFER: IP=%15[^;]; MASK=%15[^;]; GATEWAY=%15[^;]; DNS=%15[^;]; LEASE=%ld",
+                    assigned_ip, subnet_mask, default_gateway, dns_server, &lease_time);
+
+                if (parsed_fields == 5) {
+                    printf("\n---- Información Recibida ----\n");
+                    printf("IP Asignada: %s\n", assigned_ip);
+                    printf("Máscara de Subred: %s\n", subnet_mask);
+                    printf("Puerta de Enlace Predeterminada: %s\n", default_gateway);
+                    printf("Servidor DNS: %s\n", dns_server);
+                    printf("Duración del Lease: %ld segundos\n", lease_time);
+                    printf("-------------------------------\n");
+
+                    // Crear hilo para manejar la renovación automática del lease
+                    lease_params_t params = {udp_socket, &server_addr, assigned_ip, mac_address, lease_time};
+                    pthread_t renewal_thread;
+                    pthread_create(&renewal_thread, NULL, lease_renewal_loop, (void*)&params);
+
+                    // Crear hilo para escuchar el Enter
+                    pthread_t enter_thread;
+                    pthread_create(&enter_thread, NULL, listen_for_enter, NULL);
+
+                    // Esperar a que el usuario presione Enter
+                    pthread_join(enter_thread, NULL);
+
+                    // Enviar DHCPRELEASE al servidor al terminar
+                    send_dhcp_release(udp_socket, &server_addr, assigned_ip, mac_address);
+
+                    // Cerrar el socket y terminar
+                    close(udp_socket);
+                    return EXIT_SUCCESS;
+                } else {
+                    printf("No se pudo parsear correctamente la oferta del servidor.\n");
+                }
             } else {
-                printf("No se pudo parsear correctamente la oferta del servidor.\n");
+                printf("Mensaje desconocido del servidor: %s\n", buffer);
             }
         } else {
-            printf("No se pudo recibir la oferta del servidor, reintentando... (%d/%d)\n", retries + 1, MAX_RETRIES);
+            printf("No se pudo recibir la respuesta del servidor, reintentando... (%d/%d)\n", retries + 1, MAX_RETRIES);
             retries++;
         }
     }

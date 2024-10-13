@@ -9,7 +9,7 @@
 #include <time.h>
 
 #define BUFFER_SIZE 1024
-#define POOL_SIZE 100
+#define POOL_SIZE 2
 #define LOG_FILE "dhcp_server.log"
 
 // Estructura para almacenar los registros de arrendamiento
@@ -117,6 +117,7 @@ int generate_ip_pool(const char *ip_start, const char *ip_end) {
         inet_ntop(AF_INET, &addr, ip_str, INET_ADDRSTRLEN);
 
         lease_table[count].assigned = 0;
+        lease_table[count].conflicted = 0;
         strcpy(lease_table[count].ip, ip_str);
         lease_table[count].lease_start = 0;
         lease_table[count].lease_duration = 0;
@@ -132,7 +133,7 @@ int generate_ip_pool(const char *ip_start, const char *ip_end) {
 void register_lease(lease_record* lease, const char* mac_address, time_t lease_duration) {
     lease->lease_start = time(NULL);
     lease->lease_duration = lease_duration;
-    lease->assigned = 1;
+    // lease->assigned = 1;
     strcpy(lease->mac_address, mac_address);
 
     // Mejorar el formato de la salida en consola
@@ -229,6 +230,7 @@ lease_record* assign_ip(const char* client_mac, const char* subnet_mask, const c
     pthread_mutex_lock(&lease_table_mutex);
     for (int i = 0; i < POOL_SIZE; ++i) {
         if (!lease_table[i].assigned && lease_table[i].conflicted == 0) {
+            lease_table[i].assigned = 1;
             // Asignamos la MAC al registro
             strcpy(lease_table[i].mac_address, client_mac);
 
@@ -315,6 +317,11 @@ void* handle_client(void* arg) {
             } else {
                 printf("No hay direcciones IP disponibles para ofrecer.\n");
                 log_message("WARNING", "No hay direcciones IP disponibles para ofrecer a un cliente.");
+
+                // Enviar mensaje al cliente indicando que no hay IPs disponibles
+                char noip_message[BUFFER_SIZE];
+                snprintf(noip_message, BUFFER_SIZE, "DHCPNOIP: No hay direcciones IP disponibles.");
+                sendto(udp_socket, noip_message, strlen(noip_message) + 1, 0, (struct sockaddr *)&client_addr, client_addr_len);
             }
         } else {
             printf("No se pudo extraer la MAC del cliente en DHCPDISCOVER.\n");
@@ -369,7 +376,7 @@ void* handle_client(void* arg) {
                 printf("La IP solicitada %s no está asignada a la MAC %s\n", requested_ip, client_mac);
                 log_message("WARNING", "La IP solicitada no está asignada al cliente.");
 
-                // Enviar DHCPNAK al cliente, liberar ip
+                // Enviar DHCPNAK al cliente
                 char nak_message[BUFFER_SIZE];
                 snprintf(nak_message, BUFFER_SIZE, "DHCPNAK: Solicitud inválida para IP %s y MAC %s", requested_ip, client_mac);
                 sendto(udp_socket, nak_message, strlen(nak_message) + 1, 0, (struct sockaddr *)&client_addr, client_addr_len);
@@ -466,14 +473,14 @@ int main(int argc, char *argv[]) {
     // Crear socket
     int udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (udp_socket <= 0) {
-        perror("Could not create a socket");
+        perror("No se pudo crear el socket");
         log_message("ERROR", "No se pudo crear el socket UDP.");
         return EXIT_FAILURE;
     }
 
     // Bind del socket al puerto 67
     if (bind(udp_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("Could not bind the socket");
+        perror("No se pudo enlazar el socket");
         log_message("ERROR", "No se pudo enlazar el socket al puerto 67.");
         close(udp_socket);
         return EXIT_FAILURE;
