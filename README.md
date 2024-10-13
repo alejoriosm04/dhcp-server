@@ -1,6 +1,7 @@
-## DHCP Server
 
 ---
+
+## DHCP Server
 
 ### Descripción
 
@@ -58,8 +59,6 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
     sudo make run-client
     ```
 
-   El cliente se conectará al servidor y solicitará una configuración de red.
-
 5. **Ejecutar el cliente multithread**:
    Si deseas probar el cliente multithread, puedes usar el siguiente comando. Este cliente envía múltiples solicitudes al servidor en paralelo:
 
@@ -77,6 +76,7 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
 ---
 
 ### Guía para Utilizar Docker
+
 1. **Instalar Docker**:
 
     En Ubuntu:
@@ -89,55 +89,119 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
 
 2. **Construir la Imagen del Cliente**:
 
-    Ejecuta el siguiente comando en la terminal, en el directorio donde se encuentra el Dockerfile.client:
+    Ejecuta el siguiente comando en la terminal, en el directorio donde se encuentra el `Dockerfile.client`:
 
-    En Ubuntu
     ```bash
     sudo docker build -t dhcp_client -f Dockerfile.client .
     ```
+
 3. **Construir la Imagen del Servidor**:
 
-    Ejecuta el siguiente comando en la terminal, en el directorio donde se encuentra el Dockerfile.server:
+    Ejecuta el siguiente comando en la terminal, en el directorio donde se encuentra el `Dockerfile.server`:
 
-    En Ubuntu
     ```bash
     sudo docker build -t dhcp_server -f Dockerfile.server .
     ```
 
 4. **Crear una Red Docker Personalizada**:
 
-    Creamos una red Docker tipo bridge para que los contenedores puedan comunicarse entre sí.
+    Crea una red Docker tipo bridge para que los contenedores puedan comunicarse entre sí.
 
-    En Ubuntu
     ```bash
     sudo docker network create --subnet=192.168.1.0/24 dhcp_net
     ```
 
-5. **Ejecutar el Contenedor del Servidor DHCP**:
+5. **Configurar la subred adicional**:
 
-    Inicia el servidor DHCP en un contenedor conectado a la red dhcp_net.
+    Para configurar una segunda subred, ejecuta lo siguiente:
 
-    En Ubuntu
     ```bash
-    sudo docker run -it --name dhcp_server --net dhcp_net --ip 192.168.1.2 --cap-add=NET_ADMIN dhcp_server
+    sudo docker network create --subnet=192.168.2.0/24 subnet_b
     ```
 
-6. **Ejecutar el Contenedor de los clientes DHCP**:
+6. **Construir la Imagen del DHCP Relay**:
 
-    Inicia tantos clientes como desees en diferentes terminales, cada uno en su propio contenedor.
+    ```bash
+    sudo docker build -t dhcp_relay -f Dockerfile.relay .
+    ```
 
-    En Ubuntu
+7. **Ejecutar el Contenedor del Relay**:
 
-    **Terminal1**
+    Conecta el relay a las dos subredes:
+
+    ```bash
+    sudo docker run -it --name dhcp_relay --net dhcp_net --ip 192.168.1.2 --cap-add=NET_ADMIN dhcp_relay
+    ```
+
+8. **Conectar el Relay a la segunda subred**:
+
+    Conéctalo también a la segunda subred:
+
+    ```bash
+    sudo docker network connect subnet_b dhcp_relay --ip 192.168.2.3
+    ```
+
+9. **Verificar la configuración de red del Relay**:
+
+    En otra terminal, ejecuta:
+
+    ```bash
+    sudo docker exec -it dhcp_relay /bin/bash
+    ```
+
+    Luego, usa el comando `ifconfig` para verificar que el contenedor esté conectado a ambas subredes.
+
+    ```bash
+    ifconfig
+    ```
+
+10. **Habilitar el reenvío de paquetes en el contenedor Relay**:
+
+    En otra terminal, ejecuta el contenedor con privilegios y habilita el reenvío de paquetes:
+
+    ```bash
+    sudo docker run --privileged -it dhcp_relay bash
+    ```
+
+    Luego habilita el reenvío de paquetes:
+
+    ```bash
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    ```
+
+11. **Ejecutar el Contenedor del Servidor DHCP**:
+
+    Ejecuta el servidor DHCP en la segunda subred:
+
+    ```bash
+    sudo docker run -it --name dhcp_server --net subnet_b --ip 192.168.2.2 --cap-add=NET_ADMIN dhcp_server
+    ```
+
+12. **Ejecutar Clientes DHCP**:
+
+    Puedes ejecutar múltiples clientes en diferentes terminales:
+
+    **Terminal1**:
     ```bash
     sudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
     ```
 
-    **Terminal2**
+    **Terminal2**:
     ```bash
     sudo docker run -it --name dhcp_client2 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
     ```
 
+13. **Limpiar Contenedores**:
+
+    Para eliminar los contenedores en caso de errores o conflictos, puedes usar los siguientes comandos:
+
+    ```bash
+    sudo docker ps -a
+    sudo docker stop <ID_DEL_CONTENEDOR>
+    sudo docker rm <ID_DEL_CONTENEDOR>
+    ```
+
+---
 ---
 
 ### Guia para probar multithreads
