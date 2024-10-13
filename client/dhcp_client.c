@@ -6,11 +6,17 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <time.h>
+#include <sys/time.h>  // Agregar este include
 
 #define BUFFER_SIZE 1024
-#define MAX_RETRIES 3
 
-int stop_renewal = 0;  // Variable global para detener la renovación cuando se presiona Enter
+// Valores para el algoritmo exponential backoff
+#define INITIAL_INTERVAL 10   // Intervalo inicial en segundos
+#define MAX_INTERVAL 900       // Intervalo máximo en segundos
+#define MAX_TOTAL_WAIT 3600    // Tiempo máximo total de espera en segundos (opcional)
+
+// Variable global para detener la renovación cuando se presiona Enter
+int stop_renewal = 0;
 
 // Estructura para pasar parámetros a la función del hilo de renovación
 typedef struct {
@@ -59,6 +65,13 @@ void renew_lease(int udp_socket, struct sockaddr_in* server_addr, char* assigned
         // Recibir confirmación del servidor (DHCPACK)
         char buffer[BUFFER_SIZE];
         socklen_t server_addr_len = sizeof(*server_addr);
+
+        // Establecer tiempo de espera para recvfrom
+        struct timeval tv;
+        tv.tv_sec = 5;  // Tiempo de espera de 5 segundos
+        tv.tv_usec = 0;
+        setsockopt(udp_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
+
         int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
                                       (struct sockaddr *)server_addr, &server_addr_len);
         if (bytes_received > 0 && strstr(buffer, "DHCPACK")) {
@@ -163,9 +176,12 @@ int main() {
     server_addr.sin_port = htons(67);
     server_addr.sin_addr.s_addr = htonl(INADDR_BROADCAST); 
 
-    // Manejo de reintentos para el mensaje DHCPDISCOVER
-    int retries = 0;
-    while (retries < MAX_RETRIES) {
+    // Variables para el algoritmo exponential backoff
+    int current_interval = INITIAL_INTERVAL;
+    int total_wait_time = 0;
+
+    // Bucle de reintentos con exponential backoff
+    while (1) {
         // Enviar mensaje DHCPDISCOVER al servidor mediante broadcast
         char discover_message[BUFFER_SIZE];
         snprintf(discover_message, BUFFER_SIZE, "DHCPDISCOVER: MAC %s Solicitud de configuración", mac_address);
@@ -180,6 +196,12 @@ int main() {
         printf("Mensaje DHCPDISCOVER enviado por broadcast al puerto 67\n");
         printf("-------------------------------\n");
 
+        // Establecer tiempo de espera para recvfrom
+        struct timeval tv;
+        tv.tv_sec = current_interval;  // Tiempo de espera actual
+        tv.tv_usec = 0;
+        setsockopt(udp_socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
+
         // Recibir respuesta del servidor
         socklen_t server_addr_len = sizeof(server_addr);
         int bytes_received = recvfrom(udp_socket, buffer, BUFFER_SIZE - 1, 0,
@@ -189,8 +211,29 @@ int main() {
             buffer[bytes_received] = '\0';
             if (strstr(buffer, "DHCPNOIP")) {
                 printf("DHCPNOIP: El servidor DHCP informó que no hay direcciones IP disponibles.\n");
-                close(udp_socket);
-                return EXIT_FAILURE;
+
+                // Incrementar el tiempo total de espera
+                total_wait_time += current_interval;
+
+                // Comprobar si se ha alcanzado el tiempo máximo total de espera
+                if (total_wait_time >= MAX_TOTAL_WAIT) {
+                    printf("Tiempo máximo de espera alcanzado. Saliendo.\n");
+                    close(udp_socket);
+                    return EXIT_FAILURE;
+                }
+
+                // Incrementar el intervalo de espera con exponential backoff
+                current_interval *= 2;
+                if (current_interval > MAX_INTERVAL) {
+                    current_interval = MAX_INTERVAL;
+                }
+
+                // Esperar un tiempo aleatorio entre 0 y current_interval
+                int wait_time = rand() % current_interval;
+                printf("Esperando %d segundos antes de reintentar...\n", wait_time);
+                sleep(wait_time);
+
+                continue;  // Reintentar enviar DHCPDISCOVER
             } else if  (strstr(buffer, "DHCPOFFER")) {
                 printf("\n---- Oferta Recibida ----\n");
                 printf("Oferta del servidor DHCP: %s\n", buffer);
@@ -236,21 +279,46 @@ int main() {
                     return EXIT_SUCCESS;
                 } else {
                     printf("No se pudo parsear correctamente la oferta del servidor.\n");
+                    // Podemos decidir si reintentar o salir
+                    close(udp_socket);
+                    return EXIT_FAILURE;
                 }
             } else {
                 printf("Mensaje desconocido del servidor: %s\n", buffer);
+                // Podemos decidir si reintentar o salir
+                close(udp_socket);
+                return EXIT_FAILURE;
             }
         } else {
-            printf("No se pudo recibir la respuesta del servidor, reintentando... (%d/%d)\n", retries + 1, MAX_RETRIES);
-            retries++;
+            // No se recibió respuesta dentro del tiempo de espera
+            printf("No se recibió respuesta del servidor dentro del tiempo de espera.\n");
+
+            // Incrementar el tiempo total de espera
+            total_wait_time += current_interval;
+
+            // Comprobar si se ha alcanzado el tiempo máximo total de espera
+            if (total_wait_time >= MAX_TOTAL_WAIT) {
+                printf("Tiempo máximo de espera alcanzado. Saliendo.\n");
+                close(udp_socket);
+                return EXIT_FAILURE;
+            }
+
+            // Incrementar el intervalo de espera con exponential backoff
+            current_interval *= 2;
+            if (current_interval > MAX_INTERVAL) {
+                current_interval = MAX_INTERVAL;
+            }
+
+            // Esperar el tiempo actual antes de reintentar (sin aleatorización)
+            int wait_time = current_interval;
+            printf("Esperando %d segundos antes de reintentar...\n", wait_time);
+            sleep(wait_time);
+
+            continue;  // Reintentar enviar DHCPDISCOVER
         }
     }
 
-    if (retries == MAX_RETRIES) {
-        printf("No se pudo obtener una oferta del servidor después de %d intentos.\n", MAX_RETRIES);
-        close(udp_socket);
-        return EXIT_FAILURE;
-    }
-
-    return EXIT_SUCCESS;
+    // Nunca debería llegar aquí
+    close(udp_socket);
+    return EXIT_FAILURE;
 }
