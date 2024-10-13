@@ -1,4 +1,4 @@
-# Dockerfile.client
+# Dockerfile.relay
 FROM ubuntu:20.04
 
 # Instalar dependencias y herramientas necesarias
@@ -9,14 +9,17 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     net-tools
 
-# Copiar el código fuente del cliente al contenedor
-COPY client/dhcp_client.c /home/dhcp_client.c
+# Copiar el código fuente del relay al contenedor
+COPY relay/dhcp_relay.c /home/dhcp_relay.c
 
-# Compilar el cliente DHCP con la biblioteca pthread
-RUN gcc -Wall -Wextra -o /home/dhcp_client /home/dhcp_client.c -lpthread
+# Compilar el DHCP Relay
+RUN gcc -Wall -Wextra -o /home/dhcp_relay /home/dhcp_relay.c
+
+# Exponer el puerto 67/UDP
+EXPOSE 67/udp
 
 # Establecer el directorio de trabajo
 WORKDIR /home
 
 # Comando por defecto al iniciar el contenedor
-CMD ./dhcp_client && tail -f /dev/null
+CMD ["./dhcp_relay"]

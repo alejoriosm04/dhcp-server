@@ -15,7 +15,7 @@ COPY server/dhcp_server.c /home/dhcp_server.c
 COPY network_config.txt /home/network_config.txt
 
 # Compilar el servidor DHCP
-RUN gcc -Wall -Wextra -o /home/dhcp_server /home/dhcp_server.c
+RUN gcc -Wall -Wextra -o /home/dhcp_server /home/dhcp_server.c -lpthread
 
 # Exponer el puerto 67/UDP
 EXPOSE 67/udp
@@ -24,4 +24,4 @@ EXPOSE 67/udp
 WORKDIR /home
 
 # Comando por defecto al iniciar el contenedor
-CMD ["./dhcp_server", "192.168.1.10", "192.168.1.100", "network_config.txt"]
+CMD ["./dhcp_server", "192.168.2.10", "192.168.2.11", "network_config.txt"]

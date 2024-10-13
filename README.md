@@ -58,9 +58,16 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
     sudo make run-client
     ```
 
-   El cliente se conectará al servidor en `127.0.0.1` (localhost) y solicitará una configuración de red.
+   El cliente se conectará al servidor y solicitará una configuración de red.
 
-5. **Limpiar los archivos generados**:
+5. **Ejecutar el cliente multithread**:
+   Si deseas probar el cliente multithread, puedes usar el siguiente comando. Este cliente envía múltiples solicitudes al servidor en paralelo:
+
+    ```bash
+    sudo make run-client-multithread
+    ```
+
+6. **Limpiar los archivos generados**:
    Si deseas eliminar los archivos binarios generados por la compilación (ejecutables y archivos objeto), puedes usar el siguiente comando:
 
     ```bash
@@ -68,6 +75,7 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
     ```
 
 ---
+
 ### Guía para Utilizar Docker
 1. **Instalar Docker**:
 
@@ -127,9 +135,41 @@ El servidor escucha en el puerto **67** (puerto estándar para DHCP) y el client
 
     **Terminal2**
     ```bash
-    sudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    sudo docker run -it --name dhcp_client2 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
     ```
 
+---
+
+### Guia para probar multithreads
+
+1. **Realizar los pasos del 1 al 3 de la guia para utilizar docker**:
+    Esto se debe a que necesitamos el docker y sus configuraciones. 
+
+2. **Instalar xterm para hacer las pruebas en diferentes terminales**:
+    ```bash
+    sudo apt-get install -y xterm
+    ```
+
+3. **Ejecutar el servidor y lo clientes**
+    El archivo que se encuentra en el direcotrio "run_clients.sh" es un script el cual ejecuta el docker y todos los componentes necesarios para que funcione. Ahi mismo se puede cambiar la cantidad de clients que se quieren crear. 
+
+    En Ubuntu
+    ```bash
+    sudo ./run_clients.sh
+    ```
+4. **Detener y eliminar los servicios**
+
+    - Cada vez que se ejecuta el script "run_clients.sh" se abren nuevas ventanas que pueden ser molestas.  
+    - Al ejecutar el script "run_clients.sh" se crea el servidor y los contenedores respectivos.
+
+    Para solucionar ese problema se creo el script "stop_dhcp.sh" el cual elimina todo, lo cual podemos ejecutar el script "run_clients.sh" vacio.
+
+    ```bash
+    sudo ./stop_dhcp.sh
+    ```
+
+    (Ajusta el script "stop_dhcp.sh", de acuerdo a lo que quieras seguir ejecutando o eliminando)
+    
 ---
 
 ### Flujo Básico de Comunicación
