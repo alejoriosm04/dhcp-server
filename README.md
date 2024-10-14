@@ -142,7 +142,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
     Crea una red Docker tipo bridge para que los contenedores puedan comunicarse entre sí.
 
     ```bash
-    sudo docker network create --subnet=192.168.1.0/24 dhcp_net
+    sudo docker network create --subnet=192.168.1.0/24 dhcp_net_a
     ```
 
 5. **Configurar la subred adicional**:
@@ -150,7 +150,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
     Para configurar una segunda subred, ejecuta lo siguiente:
 
     ```bash
-    sudo docker network create --subnet=192.168.2.0/24 subnet_b
+    sudo docker network create --subnet=192.168.2.0/24 dhcp_net_b
     ```
 
 6. **Construir la Imagen del DHCP Relay**:
@@ -164,7 +164,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
     Conecta el relay a las dos subredes:
 
     ```bash
-    sudo docker run -it --name dhcp_relay --net dhcp_net --ip 192.168.1.2 --cap-add=NET_ADMIN dhcp_relay
+    sudo docker run -it --name dhcp_relay --net dhcp_net_a --ip 192.168.1.2 --cap-add=NET_ADMIN dhcp_relay
     ```
 
 8. **Conectar el Relay a la segunda subred**:
@@ -172,7 +172,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
     Conéctalo también a la segunda subred:
 
     ```bash
-    sudo docker network connect subnet_b dhcp_relay --ip 192.168.2.3
+    sudo docker network connect dhcp_net_b dhcp_relay --ip 192.168.2.3
     ```
 
 9. **Verificar la configuración de red del Relay**:
@@ -208,7 +208,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
     Ejecuta el servidor DHCP en la segunda subred:
 
     ```bash
-    sudo docker run -it --name dhcp_server --net subnet_b --ip 192.168.2.2 --cap-add=NET_ADMIN dhcp_server
+    sudo docker run -it --name dhcp_server --net dhcp_net_b --ip 192.168.2.2 --cap-add=NET_ADMIN dhcp_server
     ```
 
 12. **Ejecutar Clientes DHCP**:
@@ -217,12 +217,12 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
 
     **Terminal1**:
     ```bash
-    sudo docker run -it --name dhcp_client1 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    sudo docker run -it --name dhcp_client1 --net dhcp_net_a --cap-add=NET_ADMIN dhcp_client
     ```
 
     **Terminal2**:
     ```bash
-    sudo docker run -it --name dhcp_client2 --net dhcp_net --cap-add=NET_ADMIN dhcp_client
+    sudo docker run -it --name dhcp_client2 --net dhcp_net_b --cap-add=NET_ADMIN dhcp_client
     ```
 
 13. **Limpiar Contenedores**:

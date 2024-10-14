@@ -51,6 +51,10 @@ int main() {
     server_addr.sin_addr.s_addr = inet_addr("192.168.2.2");
     server_addr.sin_port = htons(SERVER_PORT);
 
+    // Definir la dirección de red y la máscara de subred
+    uint32_t netmask = inet_addr("255.255.255.0");
+    uint32_t network_address = inet_addr("192.168.1.0");
+
     printf("DHCP Relay iniciado y escuchando en el puerto %d...\n", SERVER_PORT);
 
     while (1) {
@@ -58,6 +62,12 @@ int main() {
         int n = recvfrom(sockfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&client_addr, &len);
         if (n < 0) {
             perror("Error al recibir datos");
+            continue;
+        }
+
+        // Comprobar si la dirección IP del cliente está dentro de la subred permitida
+        if ((client_addr.sin_addr.s_addr & netmask) != (network_address)) {
+            // El cliente no está en la subred permitida, ignorar el mensaje
             continue;
         }
 
