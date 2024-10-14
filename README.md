@@ -1,5 +1,5 @@
 
----
+------
 
 ## DHCP Server
 
@@ -19,7 +19,7 @@ El proyecto fue desplegado y probado en AWS, lo que permitió simular un entorno
 
 En las siguientes secciones, se detallará el Desarrollodel proyecto, describiendo las decisiones de implementación y el entorno de desarrollo utilizado. También se abordarán los Aspectos Logrados y No Logrados, seguido de un análisis en las Conclusiones sobre el aprendizaje obtenido y posibles mejoras. Finalmente, se presentarán las Referencias que guiaron la correcta implementación del trabajo.
 
----
+-------
 
 ### Desarrollo
 
@@ -267,7 +267,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
 
     (Ajusta el script "stop_dhcp.sh", de acuerdo a lo que quieras seguir ejecutando o eliminando)
     
----
+-----
 
 ### Flujo Básico de Comunicación
 
