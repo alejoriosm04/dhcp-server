@@ -37,10 +37,10 @@ Para la implementación de este proyecto, se utilizó la **API de Sockets Berkel
 
 Esta elección está justificada por varias razones:
 
-1. **Protocolo sin conexión**: DHCP no necesita una conexión persistente para el intercambio de mensajes entre el cliente y el servidor, por lo que UDP es ideal al permitir la transmisión de mensajes sin gestionar el estado de la conexión.
-2. **Eficiencia y rapidez**: UDP ofrece un método rápido de envío de mensajes, reduciendo la latencia y permitiendo tiempos de respuesta más cortos, cruciales para el proceso de asignación dinámica de IPs.
-3. **Soporte para Broadcast**: DHCP utiliza mensajes de broadcast, como **DHCPDISCOVER** y **DHCPOFFER**, lo que es facilitado por el uso de **UDP** y los **sockets tipo Datagram**.
-4. **Escalabilidad**: El servidor DHCP puede manejar múltiples clientes de forma eficiente sin abrir conexiones individuales para cada cliente, permitiendo una mejor gestión de recursos.
+1. DHCP no necesita una conexión persistente para el intercambio de mensajes entre el cliente y el servidor, por lo que UDP es ideal al permitir la transmisión de mensajes sin gestionar el estado de la conexión.
+2. UDP ofrece un método rápido de envío de mensajes, reduciendo la latencia y permitiendo tiempos de respuesta más cortos, cruciales para el proceso de asignación dinámica de IPs.
+3. DHCP utiliza mensajes de broadcast, como **DHCPDISCOVER** y **DHCPOFFER**, lo que es facilitado por el uso de **UDP** y los **sockets tipo Datagram**.
+4. El servidor DHCP puede manejar múltiples clientes de forma eficiente sin abrir conexiones individuales para cada cliente, permitiendo una mejor gestión de recursos.
 
 #### Implementación del cliente DHCP
 El cliente DHCP fue diseñado para enviar solicitudes de configuración de red utilizando los mensajes estándar del protocolo (**DHCPDISCOVER**, **DHCPOFFER**, **DHCPREQUEST**, **DHCPACK**). Cada cliente fue ejecutado en su propio contenedor mediante **Docker**, lo que permitió simular múltiples dispositivos en una red. Se utilizó un **socket tipo Datagram (SOCK_DGRAM)** basado en la API de **Sockets Berkeley** para enviar y recibir estos mensajes a través del protocolo UDP.
