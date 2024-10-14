@@ -275,7 +275,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
 2. El **servidor DHCP** recibe la solicitud y responde con una confirmación (`DHCPACK`).
 3. El cliente muestra el mensaje de confirmación recibido.
 
---
+---
 ### Aspectos Logrados y No Logrados
 
 #### Aspectos Logrados
@@ -295,7 +295,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
    - **Manejo de clientes en subredes remotas**: Gracias al **DHCP Relay**, el servidor puede atender solicitudes de clientes que se encuentran en diferentes subredes.
    - **Manejo de errores**: El servidor responde adecuadamente cuando no hay más direcciones IP disponibles, enviando un mensaje **DHCPNOIP** para informar a los clientes.
 
-#### Aspectos a Considerar para Implementaciones Futuras
+#### Aspectos No Logrados y a Considerar para Implementaciones Futuras
 
 - **Manejo del mensaje DHCPDECLINE**: Aunque no se implementó el manejo del mensaje **DHCPDECLINE** (utilizado por los clientes para informar que una dirección IP no es válida), no fue un aspecto crítico para el correcto funcionamiento del sistema en los escenarios evaluados. Sin embargo, su implementación puede ser recomendable en versiones futuras para cubrir casos de rechazo de IPs, mejorando así la robustez y el manejo de excepciones del sistema.
 
