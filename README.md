@@ -313,8 +313,6 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
 
 ## Referencias
 
-Aquí tienes la lista completa de referencias organizada en formato APA:
-
 1. Huawei. (n.d.). *How a DHCP client renews its IP address lease*. Huawei Enterprise. Retrieved October 7, 2024, from https://support.huawei.com/enterprise/en/doc/EDOC1100034071/4b2f29de/how-a-dhcp-client-renews-its-ip-address-lease
 
 2. IBM. (n.d.). *Configuring a native DHCP server and BOOTP/DHCP relay agent*. IBM Documentation. Retrieved October 7, 2024, from https://www.ibm.com/docs/nl/i/7.3?topic=dhcp-configuring-native-server-bootpdhcp-relay-agent
