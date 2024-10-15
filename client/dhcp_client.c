@@ -9,7 +9,7 @@
 #include <sys/time.h>  // Agregar este include
 
 #define BUFFER_SIZE 1024
-
+#define CLIENT_LOG_FILE "client/dhcp_client.log"
 // Valores para el algoritmo exponential backoff
 #define INITIAL_INTERVAL 10   // Intervalo inicial en segundos
 #define MAX_INTERVAL 900       // Intervalo máximo en segundos
@@ -27,6 +27,23 @@ typedef struct {
     long lease_time;
 } lease_params_t;
 
+//Funcion para generar un mensaje de log
+void log_message(const char* level, const char* message, const char* ip, const char* mac) {
+    FILE* log_file = fopen(CLIENT_LOG_FILE, "a");
+    if (log_file == NULL) {
+        perror("No se pudo abrir el archivo de log del cliente");
+        return;
+    }
+
+    time_t now = time(NULL);
+    struct tm* time_info = localtime(&now);
+    char time_str[20];
+    strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", time_info);
+
+    fprintf(log_file, "[%s] %s: %s | IP: %s | MAC: %s\n", time_str, level, message, ip, mac);
+    fclose(log_file);
+}
+
 // Función para generar una dirección MAC aleatoria (simulando diferentes clientes)
 void generate_random_mac(char* mac) {
     srand(time(NULL) + getpid());
@@ -43,10 +60,12 @@ void send_dhcp_release(int udp_socket, struct sockaddr_in* server_addr, const ch
     if (sendto(udp_socket, release_message, strlen(release_message) + 1, 0,
                (struct sockaddr *)server_addr, sizeof(*server_addr)) < 0) {
         perror("No se pudo enviar el mensaje DHCPRELEASE");
+        log_message("ERROR", "No se pudo enviar el mensaje DHCPRELEASE", assigned_ip, mac_address);
     } else {
         printf("\n---- IP Liberada ----\n");
         printf("IP %s liberada correctamente.\n", assigned_ip);
         printf("----------------------\n");
+        log_message("INFO", "IP liberada correctamente", assigned_ip, mac_address);
     }
 }
 
@@ -58,9 +77,11 @@ void renew_lease(int udp_socket, struct sockaddr_in* server_addr, char* assigned
     if (sendto(udp_socket, request_message, strlen(request_message) + 1, 0,
                (struct sockaddr *)server_addr, sizeof(*server_addr)) < 0) {
         perror("No se pudo enviar el mensaje DHCPREQUEST para renovación");
+        log_message("ERROR", "No se pudo enviar el mensaje DHCPREQUEST para renovación", assigned_ip, mac_address);
     } else {
         printf("\n---- Renovando Lease ----\n");
         printf("Solicitando renovación para IP: %s\n", assigned_ip);
+        log_message("INFO", "Solicitando renovación de lease", assigned_ip, mac_address);
 
         // Recibir confirmación del servidor (DHCPACK)
         char buffer[BUFFER_SIZE];
@@ -95,11 +116,14 @@ void renew_lease(int udp_socket, struct sockaddr_in* server_addr, char* assigned
                 printf("Servidor DNS: %s\n", dns_server);
                 printf("Duración del Lease: %ld segundos\n", lease_time);
                 printf("------------------------\n");
+                log_message("INFO", "Renovación de lease exitosa", assigned_ip, mac_address);
             } else {
                 printf("No se pudo parsear correctamente la confirmación de renovación del servidor.\n");
+                log_message("ERROR", "No se pudo parsear correctamente la confirmación de renovación del servidor", assigned_ip, mac_address);
             }
         } else {
             printf("No se pudo recibir la confirmación DHCPACK de renovación.\n");
+            log_message("ERROR", "No se pudo recibir la confirmación DHCPACK de renovación", assigned_ip, mac_address);
         }
     }
 }
@@ -110,6 +134,7 @@ void* lease_renewal_loop(void* args) {
     while (!stop_renewal) {  // Mientras no se presione Enter
         long wait_time = params->lease_time / 2;  // Esperar el 50% del tiempo del lease
         printf("Esperando %ld segundos para la siguiente renovación...\n", wait_time);
+        log_message("INFO", "Esperando para la siguiente renovación", params->assigned_ip, params->mac_address);
         sleep(wait_time);
 
         // Si stop_renewal es 1, salir del bucle
@@ -131,6 +156,11 @@ void* listen_for_enter(void* arg) {
 }
 
 int main() {
+    FILE* log_file = fopen(CLIENT_LOG_FILE, "w");
+    if (log_file != NULL) {
+        fclose(log_file);
+    }
+
     char buffer[BUFFER_SIZE];
     struct sockaddr_in server_addr, client_addr;
     char mac_address[18];
@@ -141,11 +171,13 @@ int main() {
     printf("\n---- Cliente DHCP ----\n");
     printf("MAC Address del cliente: %s\n", mac_address);
     printf("----------------------\n");
+    log_message("INFO", "Cliente DHCP iniciado", assigned_ip, mac_address);
 
     // Crear socket
     int udp_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (udp_socket <= 0) {
         perror("No se pudo crear el socket");
+        log_message("ERROR", "No se pudo crear el socket", assigned_ip, mac_address);
         return EXIT_FAILURE;
     }
 
@@ -153,6 +185,7 @@ int main() {
     int broadcastEnable = 1;
     if (setsockopt(udp_socket, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable)) < 0) {
         perror("No se pudo habilitar el modo broadcast");
+        log_message("ERROR", "No se pudo habilitar el modo broadcast", assigned_ip, mac_address);
         close(udp_socket);
         return EXIT_FAILURE;
     }
@@ -166,6 +199,7 @@ int main() {
     // Bind al puerto 68 (cliente DHCP)
     if (bind(udp_socket, (struct sockaddr *)&client_addr, sizeof(client_addr)) < 0) {
         perror("No se pudo enlazar al puerto 68");
+        log_message("ERROR", "No se pudo enlazar al puerto 68", assigned_ip, mac_address);
         close(udp_socket);
         return EXIT_FAILURE;
     }
@@ -188,6 +222,7 @@ int main() {
         if (sendto(udp_socket, discover_message, strlen(discover_message) + 1, 0,
                    (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
             perror("No se pudo enviar el mensaje DHCPDISCOVER");
+            log_message("ERROR", "No se pudo enviar el mensaje DHCPDISCOVER", assigned_ip, mac_address);
             close(udp_socket);
             return EXIT_FAILURE;
         }
@@ -195,6 +230,7 @@ int main() {
         printf("\n---- Mensaje DHCPDISCOVER ----\n");
         printf("Mensaje DHCPDISCOVER enviado por broadcast al puerto 67\n");
         printf("-------------------------------\n");
+        log_message("INFO", "Mensaje DHCPDISCOVER enviado", assigned_ip, mac_address);
 
         // Establecer tiempo de espera para recvfrom
         struct timeval tv;
@@ -211,6 +247,7 @@ int main() {
             buffer[bytes_received] = '\0';
             if (strstr(buffer, "DHCPNOIP")) {
                 printf("DHCPNOIP: El servidor DHCP informó que no hay direcciones IP disponibles.\n");
+                log_message("INFO", "El servidor DHCP informó que no hay direcciones IP disponibles", assigned_ip, mac_address);
 
                 // Incrementar el tiempo total de espera
                 total_wait_time += current_interval;
@@ -218,6 +255,7 @@ int main() {
                 // Comprobar si se ha alcanzado el tiempo máximo total de espera
                 if (total_wait_time >= MAX_TOTAL_WAIT) {
                     printf("Tiempo máximo de espera alcanzado. Saliendo.\n");
+                    log_message("ERROR", "Tiempo máximo de espera alcanzado", assigned_ip, mac_address);
                     close(udp_socket);
                     return EXIT_FAILURE;
                 }
@@ -231,6 +269,7 @@ int main() {
                 // Esperar un tiempo aleatorio entre 0 y current_interval
                 int wait_time = rand() % current_interval;
                 printf("Esperando %d segundos antes de reintentar...\n", wait_time);
+                log_message("INFO", "Esperando antes de reintentar", assigned_ip, mac_address);
                 sleep(wait_time);
 
                 continue;  // Reintentar enviar DHCPDISCOVER
@@ -238,6 +277,7 @@ int main() {
                 printf("\n---- Oferta Recibida ----\n");
                 printf("Oferta del servidor DHCP: %s\n", buffer);
                 printf("--------------------------\n");
+                log_message("INFO", "Oferta del servidor DHCP recibida", assigned_ip, mac_address);
 
                 // Variables para almacenar la información
                 char subnet_mask[16];
@@ -258,6 +298,7 @@ int main() {
                     printf("Servidor DNS: %s\n", dns_server);
                     printf("Duración del Lease: %ld segundos\n", lease_time);
                     printf("-------------------------------\n");
+                    log_message("INFO", "Información de lease recibida", assigned_ip, mac_address);
 
                     // Crear hilo para manejar la renovación automática del lease
                     lease_params_t params = {udp_socket, &server_addr, assigned_ip, mac_address, lease_time};
@@ -276,15 +317,18 @@ int main() {
 
                     // Cerrar el socket y terminar
                     close(udp_socket);
+                    log_message("INFO", "Cliente DHCP terminado", assigned_ip, mac_address);
                     return EXIT_SUCCESS;
                 } else {
                     printf("No se pudo parsear correctamente la oferta del servidor.\n");
+                    log_message("ERROR", "No se pudo parsear correctamente la oferta del servidor", assigned_ip, mac_address);
                     // Podemos decidir si reintentar o salir
                     close(udp_socket);
                     return EXIT_FAILURE;
                 }
             } else {
                 printf("Mensaje desconocido del servidor: %s\n", buffer);
+                log_message("ERROR", "Mensaje desconocido del servidor", assigned_ip, mac_address);
                 // Podemos decidir si reintentar o salir
                 close(udp_socket);
                 return EXIT_FAILURE;
@@ -292,6 +336,7 @@ int main() {
         } else {
             // No se recibió respuesta dentro del tiempo de espera
             printf("No se recibió respuesta del servidor dentro del tiempo de espera.\n");
+            log_message("ERROR", "No se recibió respuesta del servidor dentro del tiempo de espera", assigned_ip, mac_address);
 
             // Incrementar el tiempo total de espera
             total_wait_time += current_interval;
@@ -299,6 +344,7 @@ int main() {
             // Comprobar si se ha alcanzado el tiempo máximo total de espera
             if (total_wait_time >= MAX_TOTAL_WAIT) {
                 printf("Tiempo máximo de espera alcanzado. Saliendo.\n");
+                log_message("ERROR", "Tiempo máximo de espera alcanzado", assigned_ip, mac_address);
                 close(udp_socket);
                 return EXIT_FAILURE;
             }
@@ -312,6 +358,7 @@ int main() {
             // Esperar el tiempo actual antes de reintentar (sin aleatorización)
             int wait_time = current_interval;
             printf("Esperando %d segundos antes de reintentar...\n", wait_time);
+            log_message("INFO", "Esperando antes de reintentar", assigned_ip, mac_address);
             sleep(wait_time);
 
             continue;  // Reintentar enviar DHCPDISCOVER
