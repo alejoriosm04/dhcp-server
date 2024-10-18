@@ -350,13 +350,11 @@ El proyecto implementa un sistema de logs para monitorear la ejecución de cada 
 
 ### Conclusiones
 
-- El desarrollo de este proyecto permitió implementar con éxito un sistema funcional basado en el protocolo DHCP, logrando cumplir con los objetivos planteados para el cliente, servidor y relay DHCP. El uso de tecnologías como la **API de Sockets Berkeley** y **Docker** facilitó la simulación de entornos de red complejos, permitiendo probar el sistema en diferentes escenarios, tanto en redes locales como en subredes remotas.
+- El desarrollo de este proyecto permitió implementar con éxito un sistema funcional basado en el protocolo DHCP, logrando cumplir con los objetivos planteados para el cliente, servidor y relay DHCP. El uso de tecnologías como la API de Sockets Berkeley y Docker facilitó la simulación de entornos de red complejos, permitiendo probar el sistema en diferentes escenarios, tanto en redes locales como en subredes remotas.
 
 - Se logró desarrollar tanto el cliente como el servidor DHCP, asegurando la correcta asignación, renovación y liberación de direcciones IP. Además, se integró un DHCP Relay que permite la comunicación entre clientes y servidores en subredes diferentes, extendiendo la funcionalidad más allá de una red local.
 
 - Se implementaron mecanismos para gestionar situaciones como la falta de direcciones IP disponibles o solicitudes concurrentes, asegurando que el servidor pueda responder adecuadamente a los clientes en situaciones de error. Este tipo de manejo es crucial para asegurar la robustez del sistema.
-
-- Aunque se lograron todos los aspectos solicitados, el manejo del mensaje **DHCPDECLINE**, que los clientes utilizan para informar que una dirección IP no es válida, quedó como una funcionalidad pendiente. A pesar de que no fue esencial para la operación básica del sistema, sería una mejora importante para aumentar la robustez del servidor en situaciones más avanzadas.
 
 - Este proyecto no solo permitió profundizar en el funcionamiento del protocolo DHCP, sino también en la importancia de la concurrencia y la robustez en el desarrollo de aplicaciones en red. El uso de Docker como entorno de pruebas fue clave para garantizar una simulación realista y efectiva de diferentes escenarios de red. Como recomendación futura, se sugiere mejorar la implementación del manejo de errores y completar la gestión de mensajes adicionales como **DHCPDECLINE** para obtener un sistema aún más completo y robusto.
 
