@@ -12,7 +12,8 @@
 * [Introducción](#introducción)  
 * [Desarrollo](#desarrollo)  
 * [Entorno de Desarrollo](#entorno-de-desarrollo)  
-* [Uso de la API Sockets Berkeley y elección de UDP](#uso-de-la-api-sockets-berkeley-y-elección-de-udp)  
+* [Uso de la API Sockets Berkeley y elección de UDP](#uso-de-la-api-sockets-berkeley-y-elección-de-udp)
+* [Diagrama](#diagrama)
 * [Componentes](#componentes)  
     * [Implementación del Cliente DHCP](#implementación-del-cliente-dhcp)  
     * [Implementación del Servidor DHCP](#implementación-del-servidor-dhcp)  
@@ -68,6 +69,11 @@ Esta elección está justificada por varias razones:
 2. UDP ofrece un método rápido de envío de mensajes, reduciendo la latencia y permitiendo tiempos de respuesta más cortos, cruciales para el proceso de asignación dinámica de IPs.
 3. DHCP utiliza mensajes de broadcast, como **DHCPDISCOVER** y **DHCPOFFER**, lo que es facilitado por el uso de **UDP** y los **sockets tipo Datagram**.
 4. El servidor DHCP puede manejar múltiples clientes de forma eficiente sin abrir conexiones individuales para cada cliente, permitiendo una mejor gestión de recursos.
+
+### Diagrama
+
+![telematica drawio](https://github.com/user-attachments/assets/e62f64d9-6876-4caa-8334-85d8e0258032)
+
 
 ### Componentes
 
