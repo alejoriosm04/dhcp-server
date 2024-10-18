@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     net-tools
 
+# Crear el directorio de logs
+RUN mkdir -p /home/relay
+
 # Copiar el código fuente del relay al contenedor
 COPY relay/dhcp_relay.c /home/dhcp_relay.c
 

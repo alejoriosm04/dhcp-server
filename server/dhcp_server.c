@@ -10,7 +10,7 @@
 
 #define BUFFER_SIZE 1024
 #define POOL_SIZE 2
-#define LOG_FILE "dhcp_server.log"
+#define LOG_FILE "./server/dhcp_server.log"
 
 // Estructura para almacenar los registros de arrendamiento
 typedef struct {

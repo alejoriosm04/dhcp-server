@@ -1,5 +1,4 @@
 # Dockerfile.server
-
 FROM ubuntu:20.04
 
 # Instalar dependencias y herramientas necesarias
@@ -9,6 +8,9 @@ RUN apt-get update && apt-get install -y \
     iproute2 \
     iputils-ping \
     net-tools
+
+# Crear el directorio de logs
+RUN mkdir -p /home/server
 
 # Copiar el código fuente del servidor al contenedor
 COPY server/dhcp_server.c /home/dhcp_server.c

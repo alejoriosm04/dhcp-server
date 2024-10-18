@@ -6,8 +6,12 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
     iproute2 \
+    rsyslog \
     iputils-ping \
     net-tools
+
+# Crear el directorio de logs
+RUN mkdir -p /home/client
 
 # Copiar el código fuente del cliente al contenedor
 COPY client/dhcp_client.c /home/dhcp_client.c
