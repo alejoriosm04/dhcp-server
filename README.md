@@ -1,5 +1,4 @@
 
-------
 
 ## ST0255 Telemática: Proyecto 1 - Programación en Red
 
