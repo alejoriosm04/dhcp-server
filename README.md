@@ -61,7 +61,7 @@ El **DHCP Relay** fue implementado para permitir la comunicación entre clientes
 
 #### Logs
 
-El proyecto implementa un sistema de logs para monitorear la ejecución de cada componente, generando tres archivos de log: `dhcp_server.log` para el servidor, donde se registran eventos como la asignación y renovación de direcciones IP, la recepción de solicitudes y errores; `dhcp_relay.log` para el relay, que documenta la recepción y reenvío de mensajes entre los clientes y el servidor DHCP; y `dhcp_client.log` para el cliente, que registra eventos como las solicitudes de IP, la recepción de configuraciones de red y la liberación de direcciones. Estos logs facilitan la depuración y el seguimiento del estado del sistema en tiempo real. Es necesario crear estos archivos en caso de que no existan dentro de los directorios de cada componente para que se pueda ir sobreescribiendo el archivo
+El proyecto implementa un sistema de logs para monitorear la ejecución de cada componente, generando tres archivos de log: `dhcp_server.log` para el servidor, donde se registran eventos como la asignación y renovación de direcciones IP, la recepción de solicitudes y errores; `dhcp_relay.log` para el relay, que documenta la recepción y reenvío de mensajes entre los clientes y el servidor DHCP; y `dhcp_client.log` para el cliente, que registra eventos como las solicitudes de IP, la recepción de configuraciones de red y la liberación de direcciones. Estos logs facilitan la depuración y el seguimiento del estado del sistema en tiempo real. Es necesario crear estos archivos en caso de que no existan dentro de los directorios de cada componente para que se pueda ir sobrescribiendo el archivo
 
 ---
 
