@@ -318,9 +318,11 @@ El proyecto implementa un sistema de logs para monitorear la ejecución de cada 
 
 ### Flujo Básico de Comunicación
 
-1. El **cliente DHCP** envía una solicitud (`DHCPREQUEST`) desde el puerto 68 al servidor en el puerto 67.
-2. El **servidor DHCP** recibe la solicitud y responde con una confirmación (`DHCPACK`).
-3. El cliente muestra el mensaje de confirmación recibido.
+1. El cliente DHCP inicia el proceso enviando un mensaje de descubrimiento (`DHCPDISCOVER`) desde su puerto 68 en formato broadcast, buscando servidores DHCP disponibles en la red.
+2. El servidor DHCP responde con una oferta de configuración de red (`DHCPOFFER`), indicando una dirección IP disponible y otros parámetros de red, como la máscara de subred y la puerta de enlace.
+3. El cliente DHCP envía una solicitud de confirmación (`DHCPREQUEST`), aceptando la oferta recibida del servidor y solicitando la asignación de la dirección IP propuesta.
+4. El servidor DHCP confirma la asignación enviando un mensaje de aceptación final (`DHCPACK`), estableciendo la dirección IP y los parámetros de red para el cliente.
+5. El cliente DHCP recibe y aplica la configuración de red, mostrando el mensaje de confirmación recibido e iniciando su conexión en la red.
 
 ---
 ### Aspectos Logrados y No Logrados
