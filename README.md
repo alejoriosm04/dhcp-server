@@ -2,8 +2,6 @@
 
 ## ST0255 Telemática: Proyecto 1 - Programación en Red
 
--------
-
 ## Integrantes:
 - Alejandro Ríos Muñoz
 - Lina Sofía Ballesteros Merchán
