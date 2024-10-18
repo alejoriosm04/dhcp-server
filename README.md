@@ -7,6 +7,28 @@
 - Lina Sofía Ballesteros Merchán
 - Juan Esteban García Galvis
 
+### Índice
+
+* [1. Introducción](#introducción)  
+* [2. Desarrollo](#desarrollo)  
+* [2.1. Entorno de Desarrollo](#entorno-de-desarrollo)  
+* [2.2. Uso de la API Sockets Berkeley y elección de UDP](#uso-de-la-api-sockets-berkeley-y-elección-de-udp)  
+* [3. Componentes](#componentes)  
+    * [3.1. Implementación del Cliente DHCP](#implementación-del-cliente-dhcp)  
+    * [3.2. Implementación del Servidor DHCP](#implementación-del-servidor-dhcp)  
+    * [3.3. Implementación del DHCP Relay](#implementación-del-dhcp-relay)  
+* [4. Logs](#logs)  
+* [5. Requisitos](#requisitos)  
+* [6. Instrucciones de Uso](#instrucciones-de-uso)  
+* [7. Guía para Utilizar Docker](#guía-para-utilizar-docker)  
+* [8. Guía para Probar Multithreads](#guía-para-probar-multithreads)  
+* [9. Flujo Básico de Comunicación](#flujo-básico-de-comunicación)  
+* [10. Aspectos Logrados y No Logrados](#aspectos-logrados-y-no-logrados)  
+* [10.1. Aspectos Logrados](#aspectos-logrados)  
+* [10.2. Aspectos No Logrados y a Considerar para Implementaciones Futuras](#aspectos-no-logrados-y-a-considerar-para-implementaciones-futuras)  
+* [11. Conclusiones](#conclusiones)  
+* [12. Referencias](#referencias)
+
 ## Introducción 
 
 Este proyecto es una simulación del protocolo DHCP (Dynamic Host Configuration Protocol), diseñado para gestionar de manera dinámica la asignación de direcciones IP y otros parámetros de red a dispositivos conectados dentro de una red. Implementado en C utilizando sockets UDP, el proyecto refleja el funcionamiento real del protocolo, que utiliza UDP como medio de transporte para enviar y recibir mensajes sin establecer conexiones persistentes, lo que lo hace ideal para este tipo de aplicaciones de red.
@@ -34,6 +56,7 @@ Para la realización de este proyecto se trabajó en **WSL** (Windows Subsystem 
 - **Repositorio GitHub**: Utilizado para llevar el control de versiones, realizar seguimiento de las tareas y colaborar de forma eficiente.
 - **Lenguaje de programación**: Todo el proyecto fue desarrollado en **C**, haciendo uso de la **API de Sockets Berkeley** para la comunicación en red.
 - **Protocolos**: Se utilizó **UDP** (User Datagram Protocol) como protocolo de transporte, ya que el protocolo DHCP se basa en la transmisión de mensajes sin conexión persistente. Esto asegura una rápida transmisión de paquetes y tiempos de respuesta adecuados en redes dinámicas.
+- **Docker**: Se utilizó Docker para crear contenedores de cliente, servidor y relay DHCP, facilitando el despliegue y las pruebas en entornos aislados y replicables.
 - **AWS**: El proyecto fue desplegado y probado en **AWS**, lo que permitió evaluar el comportamiento del sistema en un entorno en la nube, simulando la interacción entre diferentes subredes.
 
 #### Uso de la API Sockets Berkeley y elección de UDP
@@ -45,6 +68,8 @@ Esta elección está justificada por varias razones:
 2. UDP ofrece un método rápido de envío de mensajes, reduciendo la latencia y permitiendo tiempos de respuesta más cortos, cruciales para el proceso de asignación dinámica de IPs.
 3. DHCP utiliza mensajes de broadcast, como **DHCPDISCOVER** y **DHCPOFFER**, lo que es facilitado por el uso de **UDP** y los **sockets tipo Datagram**.
 4. El servidor DHCP puede manejar múltiples clientes de forma eficiente sin abrir conexiones individuales para cada cliente, permitiendo una mejor gestión de recursos.
+
+### Componentes
 
 #### Implementación del cliente DHCP
 El cliente DHCP fue diseñado para enviar solicitudes de configuración de red utilizando los mensajes estándar del protocolo (**DHCPDISCOVER**, **DHCPOFFER**, **DHCPREQUEST**, **DHCPACK**). Cada cliente fue ejecutado en su propio contenedor mediante **Docker**, lo que permitió simular múltiples dispositivos en una red. Se utilizó un **socket tipo Datagram (SOCK_DGRAM)** basado en la API de **Sockets Berkeley** para enviar y recibir estos mensajes a través del protocolo UDP.
@@ -58,6 +83,22 @@ El servidor también gestiona los mensajes de error como **DHCPNAK** cuando una 
 
 #### Implementación del DHCP Relay
 El **DHCP Relay** fue implementado para permitir la comunicación entre clientes y servidores en diferentes subredes. Este componente actúa como un intermediario que reenvía las solicitudes de los clientes al servidor DHCP y luego retransmite las respuestas de vuelta a los clientes. Esta funcionalidad es esencial para escenarios donde el servidor DHCP no está directamente accesible por los clientes debido a la segmentación de la red.
+
+---
+
+El archivo `network_config.txt` contiene los parámetros esenciales de red que utiliza el servidor DHCP para asignar las configuraciones a los clientes. A continuación, se detallan los valores definidos en este archivo:
+
+```
+SUBNET_MASK=255.255.255.0
+DEFAULT_GATEWAY=192.168.2.1
+DNS_SERVER=8.8.8.8
+LEASE_TIME=60
+```
+
+- **SUBNET_MASK**: Define la máscara de subred utilizada en la red.
+- **DEFAULT_GATEWAY**: Especifica la puerta de enlace predeterminada que se asigna a los clientes.
+- **DNS_SERVER**: Dirección del servidor DNS que se entrega a los clientes.
+- **LEASE_TIME**: El tiempo en segundos que un cliente puede utilizar la dirección IP asignada antes de tener que renovarla.
 
 #### Logs
 
@@ -245,9 +286,9 @@ El proyecto implementa un sistema de logs para monitorear la ejecución de cada 
 
 ---
 
-### Guia para probar multithreads
+### Guía para probar multithreads
 
-1. **Realizar los pasos del 1 al 3 de la guia para utilizar docker**:
+1. **Realizar los pasos del 1 al 3 de la guía para utilizar docker**:
     Esto se debe a que necesitamos el docker y sus configuraciones. 
 
 2. **Instalar xterm para hacer las pruebas en diferentes terminales**:
@@ -272,8 +313,6 @@ El proyecto implementa un sistema de logs para monitorear la ejecución de cada 
     ```bash
     sudo ./stop_dhcp.sh
     ```
-
-    (Ajusta el script "stop_dhcp.sh", de acuerdo a lo que quieras seguir ejecutando o eliminando)
     
 -----
 
@@ -323,18 +362,18 @@ El proyecto implementa un sistema de logs para monitorear la ejecución de cada 
 
 1. Huawei. (n.d.). *How a DHCP client renews its IP address lease*. Huawei Enterprise. Retrieved October 7, 2024, from https://support.huawei.com/enterprise/en/doc/EDOC1100034071/4b2f29de/how-a-dhcp-client-renews-its-ip-address-lease
 
-2. IBM. (n.d.). *Configuring a native DHCP server and BOOTP/DHCP relay agent*. IBM Documentation. Retrieved October 7, 2024, from https://www.ibm.com/docs/nl/i/7.3?topic=dhcp-configuring-native-server-bootpdhcp-relay-agent
+2. IBM. (n.d.). *Configuring a native DHCP server and BOOTP/DHCP relay agent*. IBM Documentation. Retrieved October 10, 2024, from https://www.ibm.com/docs/nl/i/7.3?topic=dhcp-configuring-native-server-bootpdhcp-relay-agent
 
 3. IBM. (n.d.). *DHCP leases*. IBM Documentation. Retrieved October 7, 2024, from https://www.ibm.com/docs/en/i/7.4?topic=concepts-leases
 
-4. IBM. (n.d.). *Configuring and viewing a DHCP server*. IBM Documentation. Retrieved October 7, 2024, from https://www.ibm.com/docs/nl/i/7.3?topic=agent-configuring-viewing-dhcp-server
+4. IBM. (n.d.). *Configuring and viewing a DHCP server*. IBM Documentation. Retrieved September 30, 2024, from https://www.ibm.com/docs/nl/i/7.3?topic=agent-configuring-viewing-dhcp-server
 
-5. Palo Alto Networks. (n.d.). *DHCP options*. Palo Alto Networks Documentation. Retrieved October 7, 2024, from https://docs.paloaltonetworks.com/pan-os/10-1/pan-os-networking-admin/dhcp/dhcp-options
+5. Palo Alto Networks. (n.d.). *DHCP options*. Palo Alto Networks Documentation. Retrieved October 2, 2024, from https://docs.paloaltonetworks.com/pan-os/10-1/pan-os-networking-admin/dhcp/dhcp-options
 
-6. Droms, R. (1997). *Dynamic host configuration protocol*. IETF. Retrieved October 7, 2024, from https://datatracker.ietf.org/doc/html/rfc2131
+6. Droms, R. (1997). *Dynamic host configuration protocol*. IETF. Retrieved September 30, 2024, from https://datatracker.ietf.org/doc/html/rfc2131
 
 7. Goyal, M., & Pandey, R. (2003). *Dynamic host configuration protocol (DHCP) server provisioning*. IETF. Retrieved October 7, 2024, from https://datatracker.ietf.org/doc/rfc3456/
 
-8. IONOS. (n.d.). *¿Qué es el DHCP y cómo funciona?*. IONOS. Retrieved October 7, 2024, from https://www.ionos.com/es-us/digitalguide/servidores/configuracion/que-es-el-dhcp-y-como-funciona/
+8. IONOS. (n.d.). *¿Qué es el DHCP y cómo funciona?*. IONOS. Retrieved September 25, 2024, from https://www.ionos.com/es-us/digitalguide/servidores/configuracion/que-es-el-dhcp-y-como-funciona/
 
 9. Aruba Networks. (n.d.). *DHCP relay*. Aruba Networks. Retrieved October 7, 2024, from https://www.arubanetworks.com/techdocs/AFC/650/Content/afc65olh/dhc-rel.htm#:~:text=DHCP%20Relay%20provides%20a%20way,to%20a%20provisioned%20DHCP%20server
