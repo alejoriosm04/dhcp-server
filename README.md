@@ -1,7 +1,14 @@
 
 ------
 
-## DHCP Server
+## ST0255 Telemática: Proyecto 1 - Programación en Red
+
+-------
+
+## Integrantes:
+- Alejandro Ríos Muñoz
+- Lina Sofía Ballesteros Merchán
+- Juan Esteban García Galvis
 
 ## Introducción 
 
@@ -13,7 +20,7 @@ El Servidor DHCP maneja múltiples solicitudes concurrentes de clientes, asignan
 
 El Cliente DHCP, por su parte, puede ser ejecutado de manera concurrente utilizando Docker, permitiendo que múltiples instancias del cliente soliciten configuraciones de red al servidor. A cada cliente se le asigna una dirección IP única dentro del rango disponible, evitando conflictos. Si no quedan direcciones IP disponibles, el sistema informa adecuadamente a los nuevos clientes sobre la falta de disponibilidad.
 
-Asimismo, se implementó un DHCP Relay que facilita la comunicación entre clientes y servidores en diferentes subredes. Este relay actúa como intermediario entre los dispositivos y el servidor DHCP, reenviando las solicitudes de los clientes al servidor, asegurando que los clientes ubicados fuera de la subred del servidor puedan ser atendidos.
+Así mismo, se implementó un DHCP Relay que facilita la comunicación entre clientes y servidores en diferentes subredes. Este relay actúa como intermediario entre los dispositivos y el servidor DHCP, reenviando las solicitudes de los clientes al servidor, asegurando que los clientes ubicados fuera de la subred del servidor puedan ser atendidos. Tanto el DHCP Relay, como el Cliente y el Servidor cuentan con un sistema de logs implementado con el fin de monitorear, registrar y analizar el comportamiento del protocolo en tiempo de ejecución.
 
 El proyecto fue desplegado y probado en AWS, lo que permitió simular un entorno de red distribuida y llevar a cabo pruebas exhaustivas del servidor, cliente y relay en diferentes escenarios de red.
 
@@ -54,6 +61,10 @@ El servidor también gestiona los mensajes de error como **DHCPNAK** cuando una 
 
 #### Implementación del DHCP Relay
 El **DHCP Relay** fue implementado para permitir la comunicación entre clientes y servidores en diferentes subredes. Este componente actúa como un intermediario que reenvía las solicitudes de los clientes al servidor DHCP y luego retransmite las respuestas de vuelta a los clientes. Esta funcionalidad es esencial para escenarios donde el servidor DHCP no está directamente accesible por los clientes debido a la segmentación de la red.
+
+#### Logs
+
+El proyecto implementa un sistema de logs para monitorear la ejecución de cada componente, generando tres archivos de log: `dhcp_server.log` para el servidor, donde se registran eventos como la asignación y renovación de direcciones IP, la recepción de solicitudes y errores; `dhcp_relay.log` para el relay, que documenta la recepción y reenvío de mensajes entre los clientes y el servidor DHCP; y `dhcp_client.log` para el cliente, que registra eventos como las solicitudes de IP, la recepción de configuraciones de red y la liberación de direcciones. Estos logs facilitan la depuración y el seguimiento del estado del sistema en tiempo real. Es necesario crear estos archivos en caso de que no existan dentro de los directorios de cada componente para que se pueda ir sobreescribiendo el archivo
 
 ---
 
