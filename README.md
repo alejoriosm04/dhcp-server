@@ -337,6 +337,8 @@ El ambiente en AWS fue configurado para simular un entorno de red distribuido. S
 
 El DHCP Relay fue ubicado en una subred intermedia, actuando como puente entre el servidor y los clientes que se encontraban en diferentes redes. Esto permitió simular situaciones reales de administración de IPs en redes segmentadas, probando la capacidad del sistema para manejar solicitudes a través de varias subredes de forma eficiente.
 
+![image](https://github.com/user-attachments/assets/92d06bad-48c6-40d0-b9d8-baed8f1d5cc6)
+
 ---
 ### Aspectos Logrados y No Logrados
 
