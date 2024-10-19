@@ -23,7 +23,8 @@
 * [Instrucciones de Uso](#instrucciones-de-uso)  
 * [Guía para Utilizar Docker](#guía-para-utilizar-docker)  
 * [Guía para Probar Multithreads](#guía-para-probar-multithreads)  
-* [Flujo Básico de Comunicación](#flujo-básico-de-comunicación)  
+* [Flujo Básico de Comunicación](#flujo-básico-de-comunicación)
+* [Despliegue en AWS](#despliegue-en-aws)  
 * [Aspectos Logrados y No Logrados](#aspectos-logrados-y-no-logrados)  
     * [Aspectos Logrados](#aspectos-logrados)  
     * [Aspectos No Logrados y a Considerar para Implementaciones Futuras](#aspectos-no-logrados-y-a-considerar-para-implementaciones-futuras)  
@@ -329,6 +330,12 @@ El proyecto implementa un sistema de logs para monitorear la ejecución de cada 
 3. El cliente DHCP envía una solicitud de confirmación (`DHCPREQUEST`), aceptando la oferta recibida del servidor y solicitando la asignación de la dirección IP propuesta.
 4. El servidor DHCP confirma la asignación enviando un mensaje de aceptación final (`DHCPACK`), estableciendo la dirección IP y los parámetros de red para el cliente.
 5. El cliente DHCP recibe y aplica la configuración de red, mostrando el mensaje de confirmación recibido e iniciando su conexión en la red.
+
+### Despliegue en AWS
+
+El ambiente en AWS fue configurado para simular un entorno de red distribuido. Se utilizó una VPC (Virtual Private Cloud) con múltiples subredes para replicar un escenario real de una red segmentada. Dentro de la VPC, se desplegaron instancias EC2 en subredes diferentes para el servidor DHCP, cliente DHCP, y DHCP Relay, conectadas a través de una configuración de enrutamiento que permite la comunicación entre las subredes. 
+
+El DHCP Relay fue ubicado en una subred intermedia, actuando como puente entre el servidor y los clientes que se encontraban en diferentes redes. Esto permitió simular situaciones reales de administración de IPs en redes segmentadas, probando la capacidad del sistema para manejar solicitudes a través de varias subredes de forma eficiente.
 
 ---
 ### Aspectos Logrados y No Logrados
