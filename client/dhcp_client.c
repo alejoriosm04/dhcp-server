@@ -9,7 +9,7 @@
 #include <sys/time.h>  // Agregar este include
 
 #define BUFFER_SIZE 1024
-#define CLIENT_LOG_FILE "client/dhcp_client.log"
+#define CLIENT_LOG_FILE "./client/dhcp_client.log"
 // Valores para el algoritmo exponential backoff
 #define INITIAL_INTERVAL 10   // Intervalo inicial en segundos
 #define MAX_INTERVAL 900       // Intervalo máximo en segundos
